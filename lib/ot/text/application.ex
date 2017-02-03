@@ -12,7 +12,6 @@ defmodule OT.Text.Application do
   @type apply_result :: {:ok, OT.Text.datum}
                       | {:error, :delete_mismatch | :retain_too_long}
 
-
   @doc """
   Apply an operation to a piece of text.
 
