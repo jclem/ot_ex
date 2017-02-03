@@ -5,6 +5,8 @@ defmodule OT.Text.OperationTest do
 
   alias OT.Text.Operation
 
+  require OT.Fuzzer
+
   describe ".append/2" do
     test "ignores a no-op component" do
       assert Operation.append([4], 0) == [4]
@@ -36,5 +38,14 @@ defmodule OT.Text.OperationTest do
       assert Operation.join([%{i: "Foo"}], [%{d: "Bar"}]) ==
              [%{i: "Foo"}, %{d: "Bar"}]
     end
+  end
+
+  test "invert fuzz test" do
+    OT.Fuzzer.invert_fuzz(OT.Text, 1_000)
+  end
+
+  @tag :slow_fuzz
+  test "slow invert fuzz test" do
+    OT.Fuzzer.invert_fuzz(OT.Text, 10_000)
   end
 end

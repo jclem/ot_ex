@@ -39,6 +39,15 @@ defmodule OT.Text.Application do
   @spec apply(Text.datum, Operation.t) :: apply_result
   def apply(text, op), do: do_apply(text, op)
 
+  @spec apply!(Text.datum, Operation.t) :: Text.datum | no_return
+  def apply!(text, op) do
+    with {:ok, result} <- __MODULE__.apply(text, op) do
+      result
+    else
+      {:error, error} -> raise to_string(error)
+    end
+  end
+
   @spec do_apply(Text.datum, Operation.t, Text.datum) :: apply_result
   defp do_apply(text, op, result \\ "")
 
@@ -47,11 +56,10 @@ defmodule OT.Text.Application do
   end
 
   defp do_apply(text, [%{d: del} | op], result) do
-    deleted = String.slice(text, 0..String.length(del) - 1)
+    {deleted, text} = String.split_at(text, String.length(del))
 
     if del == deleted do
       text
-      |> String.slice(String.length(del)..-1)
       |> do_apply(op, result)
     else
       {:error, :delete_mismatch}
@@ -65,9 +73,10 @@ defmodule OT.Text.Application do
 
   defp do_apply(text, [ret | op], result) when is_integer(ret) do
     if ret <= String.length(text) do
+      {retained, text} = String.split_at(text, ret)
+
       text
-      |> String.slice(ret..-1)
-      |> do_apply(op, result <> String.slice(text, 0..ret - 1))
+      |> do_apply(op, result <> retained)
     else
       {:error, :retain_too_long}
     end

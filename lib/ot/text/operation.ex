@@ -62,4 +62,29 @@ defmodule OT.Text.Operation do
     |> append(hd(op_b))
     |> Kernel.++(tl(op_b))
   end
+
+  @doc false
+  @spec random(OT.Text.datum) :: t
+  def random(text) do
+    text
+    |> do_random
+    |> Enum.reverse
+  end
+
+  @spec do_random(String.t, t) :: t
+  defp do_random(text, op \\ [])
+
+  defp do_random("", op), do: op
+
+  defp do_random(text, op) do
+    split_index = :rand.uniform(String.length(text) + 1) - 1
+    {chunk, new_text} = String.split_at(text, split_index)
+    comp = Component.random(chunk)
+
+    if Component.type(comp) == :insert do
+      do_random(text, [comp | op])
+    else
+      do_random(new_text, [comp | op])
+    end
+  end
 end

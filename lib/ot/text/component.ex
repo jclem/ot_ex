@@ -187,4 +187,19 @@ defmodule OT.Text.Component do
     {%{i: String.slice(ins, 0, index)},
      %{i: String.slice(ins, index..-1)}}
   end
+
+  @doc false
+  @spec random(Text.datum) :: t
+  def random(text), do: do_random(random_type(), text)
+
+  @spec do_random(type, Text.datum) :: t
+  defp do_random(:delete, text),
+    do: %{d: text}
+  defp do_random(:insert, _text),
+    do: %{i: Text.init_random(:rand.uniform(16))}
+  defp do_random(:retain, text),
+    do: String.length(text)
+
+  @spec random_type :: type
+  defp random_type, do: Enum.random([:delete, :insert, :retain])
 end

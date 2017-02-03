@@ -5,6 +5,8 @@ defmodule OT.Text.CompositionTest do
 
   alias OT.Text.Composition
 
+  require OT.Fuzzer
+
   test "composes an insert over an insert" do
     assert Composition.compose([%{i: "Bar"}], [%{i: "Foo"}]) ==
            [%{i: "FooBar"}]
@@ -48,5 +50,14 @@ defmodule OT.Text.CompositionTest do
   test "composes a delete over a delete" do
     assert Composition.compose([%{d: "Foo"}], [%{d: "Bar"}]) ==
            [%{d: "FooBar"}]
+  end
+
+  test "fuzz test" do
+    OT.Fuzzer.composition_fuzz(OT.Text, 1_000)
+  end
+
+  @tag :slow_fuzz
+  test "slow fuzz test" do
+    OT.Fuzzer.composition_fuzz(OT.Text, 10_000)
   end
 end

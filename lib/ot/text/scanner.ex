@@ -61,10 +61,19 @@ defmodule OT.Text.Scanner do
   # Operation b is exhausted.
   def next({[head_a | tail_a], []}, _), do: {{head_a, tail_a}, {nil, []}}
 
-  def next(result = {[head_a | _], [head_b | _]}, skip_type) do
-    do_next(result,
-            Component.compare(head_a, head_b),
-            Component.type(head_a) == skip_type)
+  def next(result = {[head_a | tail_a], [head_b | tail_b]}, skip_type) do
+    cond do
+      Component.no_op?(head_a) && Component.no_op?(head_b) ->
+        next({tail_a, tail_b}, skip_type)
+      Component.no_op?(head_a) ->
+        next({tail_a, [head_b | tail_b]}, skip_type)
+      Component.no_op?(head_b) ->
+        next({[head_a | tail_a], tail_b}, skip_type)
+      true ->
+        do_next(result,
+                Component.compare(head_a, head_b),
+                Component.type(head_a) == skip_type)
+    end
   end
 
   # A > B and is splittable, so split A
