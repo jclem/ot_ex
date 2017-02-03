@@ -4,8 +4,7 @@ defmodule OT.Text.Scanner do
   from each.
   """
 
-  alias OT.Text
-  alias Text.Component
+  alias OT.Text.{Component, Operation}
 
   @typedoc "A type which is not to be split when iterating"
   @type skip_type :: :delete | :insert | nil
@@ -13,13 +12,13 @@ defmodule OT.Text.Scanner do
   @typedoc """
   The input to the scanner—a tuple containing two operations
   """
-  @type input :: {Text.operation, Text.operation}
+  @type input :: {Operation.t, Operation.t}
 
   @typedoc """
   An operation's next scanned full or partial component, and its resulting
   tail operation
   """
-  @type operation_split :: {Component.t | nil, Text.operation}
+  @type operation_split :: {Component.t | nil, Operation.t}
 
   @typedoc """
   A tuple representing the new head component and tail operation of the two
@@ -69,7 +68,7 @@ defmodule OT.Text.Scanner do
   end
 
   # A > B and is splittable, so split A
-  @spec do_next(input, Comopnent.comparison, boolean) :: output
+  @spec do_next(input, Component.comparison, boolean) :: output
   defp do_next({[head_a | tail_a], [head_b | tail_b]}, :gt, false) do
     {head_a, remainder_a} = Component.split(head_a, Component.length(head_b))
     {{head_a, [remainder_a | tail_a]}, {head_b, tail_b}}

@@ -4,6 +4,7 @@ defmodule OT.Text.Application do
   """
 
   alias OT.Text, as: Text
+  alias Text.Operation
 
   @typedoc """
   The result of an `apply/2` function call, representing either success or error
@@ -35,10 +36,10 @@ defmodule OT.Text.Application do
     deleted in the text
   - `:retain_too_long` A retain component skipped past the end of the text
   """
-  @spec apply(Text.datum, Text.operation) :: apply_result
+  @spec apply(Text.datum, Operation.t) :: apply_result
   def apply(text, op), do: do_apply(text, op)
 
-  @spec do_apply(Text.datum, Text.operation, Text.datum) :: apply_result
+  @spec do_apply(Text.datum, Operation.t, Text.datum) :: apply_result
   defp do_apply(text, op, result \\ "")
 
   defp do_apply(text, [], result) do

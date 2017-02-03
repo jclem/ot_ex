@@ -17,4 +17,9 @@ defmodule OT.Type do
   Apply an operation to a datum of the type operated on by the OT type.
   """
   @callback apply(any, list) :: any
+
+  @doc """
+  Compose two operations together into a single operation.
+  """
+  @callback compose(operation_a :: list, operation_b :: list) :: list
 end

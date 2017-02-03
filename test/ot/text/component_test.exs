@@ -33,6 +33,20 @@ defmodule OT.Text.ComponentTest do
     end
   end
 
+  describe ".join/2" do
+    test "joins two retains" do
+      assert Component.join(4, 2) == [6]
+    end
+
+    test "joins two inserts" do
+      assert Component.join(%{i: "Foo"}, %{i: "Bar"}) == [%{i: "FooBar"}]
+    end
+
+    test "joins two deletes" do
+      assert Component.join(%{d: "Foo"}, %{d: "Bar"}) == [%{d: "FooBar"}]
+    end
+  end
+
   describe ".compare/2" do
     test "compares two components" do
       comp_a = 4
