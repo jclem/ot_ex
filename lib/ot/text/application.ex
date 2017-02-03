@@ -10,7 +10,7 @@ defmodule OT.Text.Application do
   to apply an operation.
   """
   @type apply_result :: {:ok, OT.Text.datum}
-                      | {:error, :unmatched_delete | :retain_too_long}
+                      | {:error, :delete_mismatch | :retain_too_long}
 
 
   @doc """
@@ -27,25 +27,12 @@ defmodule OT.Text.Application do
       iex> OT.Text.Application.apply("Foo", [3, %{i: " Bar"}])
       {:ok, "Foo Bar"}
 
-      iex> OT.Text.Application.apply(
-      ...>   "Fox Baz", [2, %{d: "x"}, %{i: "o"}, 3, %{d: "z"}, %{i: "r"}])
-      {:ok, "Foo Bar"}
-
-      iex> OT.Text.Application.apply("Foo Baz", [3, %{i: " Bar"}])
-      {:ok, "Foo Bar Baz"}
-
       iex> OT.Text.Application.apply("Foo", [%{d: "Foos"}])
-      {:error, :unmatched_delete}
-
-      iex> OT.Text.Application.apply("Foo", [4])
-      {:error, :retain_too_long}
-
-      iex> OT.Text.Application.apply("Fo", [2, %{i: "o"}, 4])
-      {:error, :retain_too_long}
+      {:error, :delete_mismatch}
 
   ## Errors
 
-  - `:unmatched_delete` A delete component did not match the text it would have
+  - `:delete_mismatch` A delete component did not match the text it would have
     deleted in the text
   - `:retain_too_long` A retain component skipped past the end of the text
   """
@@ -67,7 +54,7 @@ defmodule OT.Text.Application do
       |> String.slice(String.length(del)..-1)
       |> do_apply(op, result)
     else
-      {:error, :unmatched_delete}
+      {:error, :delete_mismatch}
     end
   end
 
