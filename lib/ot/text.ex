@@ -78,6 +78,9 @@ defmodule OT.Text do
       ...>               [2, %{d: "x"}, %{i: "o"}, 3, %{d: "z"}, %{i: "r"}])
       {:ok, "Foo Bar"}
 
+      iex> OT.Text.apply("Foo Baz", [3, %{i: " Bar"}])
+      {:ok, "Foo Bar Baz"}
+
       iex> OT.Text.apply("Foo", [%{d: "Foos"}])
       {:error, :unmatched_delete}
 
@@ -99,8 +102,8 @@ defmodule OT.Text do
   @spec do_apply(datum, operation, datum) :: apply_result
   defp do_apply(text, op, result \\ "")
 
-  defp do_apply(_text, [], result) do
-    {:ok, result}
+  defp do_apply(text, [], result) do
+    {:ok, result <> text}
   end
 
   defp do_apply(text, [%{d: del} | op], result) do
