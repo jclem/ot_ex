@@ -46,6 +46,25 @@ defmodule OT.Text.Component do
   @type t :: delete | insert | retain
 
   @doc """
+  Invert a component.
+
+  ## Examples
+
+      iex> OT.Text.Component.invert(%{i: "Foo"})
+      %{d: "Foo"}
+
+      iex> OT.Text.Component.invert(%{d: "Foo"})
+      %{i: "Foo"}
+
+      iex> OT.Text.Component.invert(4)
+      4
+  """
+  @spec invert(t) :: t
+  def invert(comp) when is_integer(comp), do: comp
+  def invert(%{d: del}), do: %{i: del}
+  def invert(%{i: ins}), do: %{d: ins}
+
+  @doc """
   Determine the length of a component.
 
   ## Examples

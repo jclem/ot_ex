@@ -35,6 +35,17 @@ defmodule OT.Text.Operation do
   end
 
   @doc """
+  Invert an operation.
+
+  ## Example
+
+      iex> OT.Text.Operation.invert([4, %{i: "Foo"}])
+      [4, %{d: "Foo"}]
+  """
+  @spec invert(t) :: t
+  def invert(op), do: Enum.map(op, &Component.invert/1)
+
+  @doc """
   Join two operations into a single operation.
 
   ## Example

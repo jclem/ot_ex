@@ -19,6 +19,13 @@ defmodule OT.Text.OperationTest do
     end
   end
 
+  describe ".invert/1" do
+    test "inverts an operation" do
+      assert Operation.invert([4, %{i: "Foo"}, %{d: "Bar"}, 3])
+      [4, %{d: "Foo"}, %{i: "Bar"}, 3]
+    end
+  end
+
   describe ".join/2" do
     test "joins two operations with a common terminus type" do
       assert Operation.join([%{i: "Foo"}], [%{i: "Bar"}]) ==

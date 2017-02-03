@@ -5,6 +5,20 @@ defmodule OT.Text.ComponentTest do
 
   alias OT.Text.Component
 
+  describe ".invert/1" do
+    test "inverts a delete" do
+      assert Component.invert(%{d: "Foo"}) == %{i: "Foo"}
+    end
+
+    test "inverts an insert" do
+      assert Component.invert(%{i: "Foo"}) == %{d: "Foo"}
+    end
+
+    test "inverts a retain" do
+      assert Component.invert(4) == 4
+    end
+  end
+
   describe ".length/1" do
     test "determines the length of a delete" do
       assert Component.length(%{d: "Foo"}) == 3
