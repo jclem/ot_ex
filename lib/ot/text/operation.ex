@@ -7,13 +7,18 @@ defmodule OT.Text.Operation do
   alias OT.Text.Component
 
   @typedoc """
-  An operation, which is a list consisting of `t:retain/0`, `t:insert/0`, and
-  `t:delete/0` components
+  An operation, which is a list consisting of `t:OT.Text.Component.retain/0`,
+  `t:OT.Text.Component.insert/0`, and `t:OT.Text.Component.delete/0` components
   """
   @type t :: [Component.t]
 
   @doc """
   Append a component to an operation.
+
+  ## Example
+
+      iex> OT.Text.Operation.append([%{i: "Foo"}], %{i: "Bar"})
+      [%{i: "FooBar"}]
   """
   @spec append(t, Component.t) :: t
   def append([], comp), do: [comp]
@@ -31,6 +36,11 @@ defmodule OT.Text.Operation do
 
   @doc """
   Join two operations into a single operation.
+
+  ## Example
+
+      iex> OT.Text.Operation.join([3, %{i: "Foo"}], [%{i: "Bar"}, 4])
+      [3, %{i: "FooBar"}, 4]
   """
   @spec join(t, t) :: t
   def join([], op_b), do: op_b

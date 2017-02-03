@@ -86,7 +86,7 @@ defmodule OT.Text.Component do
   Will return `:gt` if first is greater than second, `:lt` if first is less
   than second, or `:eq` if they span equal lengths.
 
-  ## Examples
+  ## Example
 
       iex> OT.Text.Component.compare(%{i: "Foo"}, 1)
       :gt
@@ -107,7 +107,7 @@ defmodule OT.Text.Component do
   Join two components into an operation, combining them into a single component
   if they are of the same type.
 
-  ## Examples
+  ## Example
 
       iex> OT.Text.Component.join(%{i: "Foo"}, %{i: "Bar"})
       [%{i: "FooBar"}]

@@ -12,7 +12,7 @@ defmodule OT.Text.Composition do
   same effect on document state as applying one operation and then the other:
   *S ○ compose(Oa, Ob) = S ○ Oa ○ Ob*.
 
-  ## Examples
+  ## Example
 
       iex> OT.Text.Composition.compose([%{i: "Bar"}], [%{i: "Foo"}])
       [%{i: "FooBar"}]
