@@ -3,7 +3,7 @@ defmodule OT.Text.Application do
   The application of a text operation to a piece of text.
   """
 
-  alias OT.Text, as: Text
+  alias OT.Text
   alias Text.Operation
 
   @typedoc """

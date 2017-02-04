@@ -45,6 +45,12 @@ defmodule OT.Text do
     |> String.slice(0, length)
   end
 
+  defdelegate apply(text, op), to: OT.Text.Application
+  defdelegate apply!(text, op), to: OT.Text.Application
+  defdelegate compose(op_a, op_b), to: OT.Text.Composition
+  defdelegate invert(op), to: OT.Text.Operation
+  defdelegate transform(op_a, op_b, side), to: OT.Text.Transformation
+
   @doc false
   defdelegate random_op(text), to: OT.Text.Operation, as: :random
 end
