@@ -1,7 +1,7 @@
 defmodule OT.Text.Scanner do
   @moduledoc """
   Enumerates over a pair of operations, yielding a full or partial component
-  from each.
+  from each
   """
 
   alias OT.Text.{Component, Operation}

@@ -1,7 +1,6 @@
 defmodule OT.Text.Operation do
   @moduledoc """
-  A list of components that iterates over a piece of text, possible making
-  changes to it.
+  A list of components that iterates over and/or modifies a piece of text
   """
 
   alias OT.Text.Component

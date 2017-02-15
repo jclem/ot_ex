@@ -1,6 +1,6 @@
 defmodule OT.Text.Application do
   @moduledoc """
-  The application of a text operation to a text datum.
+  The application of a text operation to a piece of text.
   """
 
   alias OT.Text, as: Text
@@ -8,7 +8,7 @@ defmodule OT.Text.Application do
 
   @typedoc """
   The result of an `apply/2` function call, representing either success or error
-  to apply an operation.
+  in application of an operation
   """
   @type apply_result :: {:ok, OT.Text.datum}
                       | {:error, :delete_mismatch | :retain_too_long}
@@ -39,6 +39,9 @@ defmodule OT.Text.Application do
   @spec apply(Text.datum, Operation.t) :: apply_result
   def apply(text, op), do: do_apply(text, op)
 
+  @doc """
+  Same as `apply/2`, but raises if the application fails.
+  """
   @spec apply!(Text.datum, Operation.t) :: Text.datum | no_return
   def apply!(text, op) do
     with {:ok, result} <- __MODULE__.apply(text, op) do
