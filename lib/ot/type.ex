@@ -1,6 +1,6 @@
 defmodule OT.Type do
   @moduledoc """
-  A behaviour for implementing an operational transformationt type.
+  A behaviour for implementing an operational transformation type.
 
   An operational transformation (OT) type is a module that is able to apply
   operations on a piece of data in any order and guarantee convergence of the
