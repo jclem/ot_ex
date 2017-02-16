@@ -8,6 +8,7 @@ defmodule Ot.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
+     aliases: aliases(),
      dialyzer: [flags: ~w(-Werror_handling
                           -Wrace_conditions
                           -Wunderspecs
@@ -19,7 +20,7 @@ defmodule Ot.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger]]
+    []
   end
 
   # Dependencies can be Hex packages:
@@ -35,5 +36,9 @@ defmodule Ot.Mixfile do
     [{:ex_doc, "~> 0.14", only: [:dev]},
      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
      {:credo, "~> 0.5", only: [:dev, :test]}]
+  end
+
+  defp aliases do
+    [lint: ["credo", "dialyzer --halt-exit-status"]]
   end
 end

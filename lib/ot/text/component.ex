@@ -1,6 +1,6 @@
 defmodule OT.Text.Component do
   @moduledoc """
-  An individual unit of work to be performed on a text datum.
+  An individual unit of work to be performed on a piece of text.
 
   A component represents a retain or modification of the text:
 
@@ -14,19 +14,19 @@ defmodule OT.Text.Component do
 
   @typedoc """
   A delete component, in which a string of zero or more characters are deleted
-  from the text datum
+  from the text
   """
   @type delete :: %{d: Text.datum}
 
   @typedoc """
   An insert component, in which a string of zero or more characters are inserted
-  into the text datum
+  into the text
   """
   @type insert :: %{i: Text.datum}
 
   @typedoc """
-  A retain component, in which a number of characters in the text datum are
-  skipped over
+  A retain component, in which a number of characters in the text are skipped
+  over
   """
   @type retain :: non_neg_integer
 
@@ -41,7 +41,7 @@ defmodule OT.Text.Component do
   @type comparison :: :eq | :gt | :lt
 
   @typedoc """
-  A single unit of "work" performed on a piece of text.
+  A single unit of "work" performed on a piece of text
   """
   @type t :: delete | insert | retain
 
