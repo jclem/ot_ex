@@ -35,7 +35,7 @@ defmodule OT.Text.Scanner do
   over operation `b`, the insert operations from `a` should not be split in
   order to preserve user intent.
 
-  When any operation's componets are exhausted, it will be represented by
+  When any operation's components are exhausted, it will be represented by
   the tuple `{nil, []}`.
 
   ## Examples
