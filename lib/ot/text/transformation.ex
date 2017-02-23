@@ -53,7 +53,7 @@ defmodule OT.Text.Transformation do
     |> do_transform(:left, Operation.append(result, head_a))
   end
 
-  # insert / insert / left
+  # insert / insert / right
   defp do_transform({{head_a = %{i: _}, tail_a},
                      {head_b = %{i: _}, tail_b}}, :right, result) do
     {[head_a | tail_a], tail_b}
