@@ -32,6 +32,6 @@ defmodule OT.JSON do
   defdelegate apply(text, op), to: OT.JSON.Application
   defdelegate apply!(text, op), to: OT.JSON.Application
   defdelegate compose(op_a, op_b), to: OT.JSON.Composition
-  # defdelegate invert(op), to: OT.JSON.Operation
+  defdelegate invert(op), to: OT.JSON.Operation
   # defdelegate transform(op_a, op_b, side), to: OT.JSON.Transformation
 end

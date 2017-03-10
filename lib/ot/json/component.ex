@@ -17,6 +17,7 @@ defmodule OT.JSON.Component do
 
   alias OT.JSON
   alias JSON.Operation
+  alias OT.Text.Component, as: TextComponent
 
   @typedoc "A key pointing to a location in an object"
   @type key :: String.t
@@ -85,4 +86,32 @@ defmodule OT.JSON.Component do
   @type t :: list_replace | list_delete | list_insert | list_move
              | object_replace | object_delete | object_insert | numeric_add
              | subtype
+
+  @doc """
+  Invert a single component.
+
+  ## Example
+
+      iex> OT.JSON.Component.invert(%{p: [0], ld: 1})
+      %{p: [0], li: 1}
+  """
+  @spec invert(t) :: t
+  def invert(%{p: p, ld: ld, li: li}),
+    do: %{p: p, ld: li, li: ld}
+  def invert(%{p: p, ld: ld}),
+    do: %{p: p, li: ld}
+  def invert(%{p: p, li: li}),
+    do: %{p: p, ld: li}
+  def invert(%{p: p, lm: lm}),
+    do: %{p: Enum.slice(p, 0..-2) ++ [lm], lm: List.last(p)}
+  def invert(%{p: p, od: od, oi: oi}),
+    do: %{p: p, od: oi, oi: od}
+  def invert(%{p: p, od: od}),
+    do: %{p: p, oi: od}
+  def invert(%{p: p, oi: oi}),
+    do: %{p: p, od: oi}
+  def invert(%{p: p, na: na}),
+    do: %{p: p, na: na * -1}
+  def invert(%{p: p, t: "text", o: o}),
+    do: %{p: p, t: "text", o: TextComponent.invert(o)}
 end
