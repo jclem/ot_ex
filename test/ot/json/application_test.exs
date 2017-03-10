@@ -42,4 +42,16 @@ defmodule OT.JSON.ApplicationTest do
     op = [%{p: ["foo"], od: "baz", oi: "qux"}]
     assert Application.apply(datum, op) == {:error, :delete_mismatch}
   end
+
+  test "returns an error with an invalid list subtype op" do
+    datum = [0, "test"]
+    op = [%{p: [0], na: -1}, %{p: [1], t: "text", o: [10]}]
+    assert Application.apply(datum, op) == {:error, :retain_too_long}
+  end
+
+  test "returns an error with an invalid object subtype op" do
+    datum = %{foo: "bar"}
+    op = [%{p: [:foo], t: "text", o: [10]}]
+    assert Application.apply(datum, op) == {:error, :retain_too_long}
+  end
 end

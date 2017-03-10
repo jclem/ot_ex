@@ -123,8 +123,12 @@ defmodule OT.JSON.Application do
     do: apply_in(json, path, ins_object, &object_insert/3)
   defp do_apply(%{p: path, na: number}, json),
     do: apply_in(json, path, number, &numeric_add/3)
-  defp do_apply(%{p: path, t: type, o: op}, json),
-    do: apply_in(json, path, {type, op}, &apply_subtype/3)
+
+  defp do_apply(%{p: path, t: type, o: op}, json) do
+    apply_in(json, path, {type, op}, &apply_subtype/3)
+  catch
+    err = {:error, _} -> err
+  end
 
   @spec apply_in(JSON.datum, Component.path, argument, component_function)
                  :: JSON.datum | no_return
@@ -141,14 +145,20 @@ defmodule OT.JSON.Application do
                       {String.t, list}) :: JSON.datum
   defp apply_subtype(value, index, {"text", op}) when is_list(value) do
     old_string = Enum.at(value, index)
-    new_string = Text.apply!(old_string, op)
-    list_replace(value, index, {old_string, new_string})
+
+    case Text.apply(old_string, op) do
+      {:ok, new_string} -> list_replace(value, index, {old_string, new_string})
+      err = {:error, _} -> throw err
+    end
   end
 
   defp apply_subtype(value, key, {"text", op}) when is_map(value) do
     old_string = Map.get(value, key)
-    new_string = Text.apply!(old_string, op)
-    object_replace(value, key, {old_string, new_string})
+
+    case Text.apply(old_string, op) do
+      {:ok, new_string} -> object_replace(value, key, {old_string, new_string})
+      err = {:error, _} -> throw err
+    end
   end
 
   @spec list_replace(JSON.json_list, Component.index, {JSON.value, JSON.value})
