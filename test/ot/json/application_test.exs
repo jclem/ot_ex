@@ -16,6 +16,12 @@ defmodule OT.JSON.ApplicationTest do
         %{p: [2, "Hello", 0, "wrld"], od: ["world", "World"], oi: "World"}
       ]
     assert Application.apply(datum, op) ==
-           [5, "Baz Qux", %{"Hello" => [%{"wrld" => "World"}]}]
+           {:ok, [5, "Baz Qux", %{"Hello" => [%{"wrld" => "World"}]}]}
+  end
+
+  test "list delete verifies deleted data" do
+    datum = [0, 1, 2]
+    op = [%{p: [1], ld: 3}]
+    assert Application.apply(datum, op) == {:error, :delete_mismatch}
   end
 end

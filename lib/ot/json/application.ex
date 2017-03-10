@@ -33,44 +33,52 @@ defmodule OT.JSON.Application do
   ## Examples
 
       iex> OT.JSON.Application.apply(["Bar"], [%{p: [0], ld: "Bar", li: "Baz"}])
-      ["Baz"]
+      {:ok, ["Baz"]}
 
       iex> OT.JSON.Application.apply([], [%{p: [0], li: "Baz"}])
-      ["Baz"]
+      {:ok, ["Baz"]}
 
       iex> OT.JSON.Application.apply(["Bar"], [%{p: [0], ld: "Bar"}])
-      []
+      {:ok, []}
 
       iex> OT.JSON.Application.apply([1, 3, 2], [%{p: [1], lm: 2}])
-      [1, 2, 3]
+      {:ok, [1, 2, 3]}
 
       iex> OT.JSON.Application.apply(%{"Bar" => "Baz"},
       ...>                           [%{p: ["Bar"], od: "Baz", oi: "Qux"}])
-      %{"Bar" => "Qux"}
+      {:ok, %{"Bar" => "Qux"}}
 
       iex> OT.JSON.Application.apply(%{},
       ...>                           [%{p: ["Bar"], oi: "Qux"}])
-      %{"Bar" => "Qux"}
+      {:ok, %{"Bar" => "Qux"}}
 
       iex> OT.JSON.Application.apply(%{"Bar" => "Baz"},
       ...>                           [%{p: ["Bar"], od: "Baz"}])
-      %{}
+      {:ok, %{}}
 
       iex> OT.JSON.Application.apply([], [%{p: [0], li: "Baz"}])
-      ["Baz"]
+      {:ok, ["Baz"]}
 
       iex> OT.JSON.Application.apply(["Bar"], [%{p: [0], ld: "Bar"}])
-      []
+      {:ok, []}
 
       iex> OT.JSON.Application.apply([0], [%{p: [0], na: 1}])
-      [1]
+      {:ok, [1]}
 
       iex> OT.JSON.Application.apply(
       ...>   ["Foo"], [%{p: [0], t: "text", o: [3, %{i: "Bar"}]}])
-      ["FooBar"]
+      {:ok, ["FooBar"]}
+
+      iex> OT.JSON.Application.apply([0, 1, 2], [%{p: [0], ld: "x"}])
+      {:error, :delete_mismatch}
   """
   @spec apply(JSON.datum, Operation.t) :: apply_result
-  def apply(json, op), do: Enum.reduce(op, json, &do_apply/2)
+  def apply(json, op) do
+    case Enum.reduce(op, json, &do_apply/2) do
+      err = {:error, _} -> err
+      datum -> {:ok, datum}
+    end
+  end
 
   @spec apply!(JSON.datum, Operation.t) :: JSON.datum | no_return
   def apply!(json, op) do
@@ -84,8 +92,13 @@ defmodule OT.JSON.Application do
   @spec do_apply(Component.t, JSON.datum) :: JSON.datum | no_return
   defp do_apply(%{p: path, ld: del_object, li: ins_object}, json),
     do: apply_in(json, path, {del_object, ins_object}, &list_replace/3)
-  defp do_apply(%{p: path, ld: del_object}, json),
-    do: apply_in(json, path, del_object, &list_delete/3)
+
+  defp do_apply(%{p: path, ld: del_object}, json) do
+    apply_in(json, path, del_object, &list_delete/3)
+  catch
+    err = {:error, _} -> err
+  end
+
   defp do_apply(%{p: path, li: ins_object}, json),
     do: apply_in(json, path, ins_object, &list_insert/3)
   defp do_apply(%{p: path, lm: index}, json),
@@ -136,9 +149,12 @@ defmodule OT.JSON.Application do
 
   @spec list_delete(JSON.json_list, Component.index, JSON.value)
         :: JSON.json_list
-  defp list_delete(list, index, _value) do
-    # TODO: Verify the object being deleted is correct
-    List.delete_at(list, index)
+  defp list_delete(list, index, value) do
+    if Enum.at(list, index) == value do
+      List.delete_at(list, index)
+    else
+      throw {:error, :delete_mismatch}
+    end
   end
 
   @spec list_insert(JSON.json_list, Component.index, JSON.value)
