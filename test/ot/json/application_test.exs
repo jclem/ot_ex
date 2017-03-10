@@ -24,4 +24,22 @@ defmodule OT.JSON.ApplicationTest do
     op = [%{p: [1], ld: 3}]
     assert Application.apply(datum, op) == {:error, :delete_mismatch}
   end
+
+  test "list replace verifies deleted data" do
+    datum = [0, 1, 2]
+    op = [%{p: [1], ld: 3, li: 4}]
+    assert Application.apply(datum, op) == {:error, :delete_mismatch}
+  end
+
+  test "object delete verifies deleted data" do
+    datum = %{foo: "bar"}
+    op = [%{p: ["foo"], od: "baz"}]
+    assert Application.apply(datum, op) == {:error, :delete_mismatch}
+  end
+
+  test "object replace verifies deleted data" do
+    datum = %{foo: "bar"}
+    op = [%{p: ["foo"], od: "baz", oi: "qux"}]
+    assert Application.apply(datum, op) == {:error, :delete_mismatch}
+  end
 end

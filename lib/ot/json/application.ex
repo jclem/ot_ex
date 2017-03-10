@@ -90,8 +90,11 @@ defmodule OT.JSON.Application do
   end
 
   @spec do_apply(Component.t, JSON.datum) :: JSON.datum | no_return
-  defp do_apply(%{p: path, ld: del_object, li: ins_object}, json),
-    do: apply_in(json, path, {del_object, ins_object}, &list_replace/3)
+  defp do_apply(%{p: path, ld: del_object, li: ins_object}, json) do
+    apply_in(json, path, {del_object, ins_object}, &list_replace/3)
+  catch
+    err = {:error, _} -> err
+  end
 
   defp do_apply(%{p: path, ld: del_object}, json) do
     apply_in(json, path, del_object, &list_delete/3)
@@ -103,10 +106,19 @@ defmodule OT.JSON.Application do
     do: apply_in(json, path, ins_object, &list_insert/3)
   defp do_apply(%{p: path, lm: index}, json),
     do: apply_in(json, path, index, &list_move/3)
-  defp do_apply(%{p: path, od: del_object, oi: ins_object}, json),
-    do: apply_in(json, path, {del_object, ins_object}, &object_replace/3)
-  defp do_apply(%{p: path, od: del_object}, json),
-    do: apply_in(json, path, del_object, &object_delete/3)
+
+  defp do_apply(%{p: path, od: del_object, oi: ins_object}, json) do
+    apply_in(json, path, {del_object, ins_object}, &object_replace/3)
+  catch
+    err = {:error, _} -> err
+  end
+
+  defp do_apply(%{p: path, od: del_object}, json) do
+    apply_in(json, path, del_object, &object_delete/3)
+  catch
+    err = {:error, _} -> err
+  end
+
   defp do_apply(%{p: path, oi: ins_object}, json),
     do: apply_in(json, path, ins_object, &object_insert/3)
   defp do_apply(%{p: path, na: number}, json),
@@ -182,9 +194,12 @@ defmodule OT.JSON.Application do
   end
 
   @spec object_delete(JSON.json_map, Component.key, JSON.value) :: JSON.json_map
-  defp object_delete(map, key, _value) do
-    # TODO: Verify the object being deleted is correct
-    Map.delete(map, key)
+  defp object_delete(map, key, value) do
+    if Map.get(map, key) == value do
+      Map.delete(map, key)
+    else
+      throw {:error, :delete_mismatch}
+    end
   end
 
   @spec object_insert(JSON.json_map, Component.key, JSON.value) :: JSON.json_map
