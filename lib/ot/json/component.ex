@@ -16,7 +16,6 @@ defmodule OT.JSON.Component do
   """
 
   alias OT.JSON
-  alias JSON.Operation
   alias OT.Text.Component, as: TextComponent
 
   @typedoc "A key pointing to a location in an object"
