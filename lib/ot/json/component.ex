@@ -120,108 +120,88 @@ defmodule OT.JSON.Component do
   component.
   """
   @spec join(t, t) :: Operation.t
+
   # text/text
-  def join(%{p: p, t: "text", o: o_a}, %{p: p, t: "text", o: o_b}) do
-    [%{p: p, t: "text", o: Text.compose(o_a, o_b)}]
-  end
+  def join(%{p: p, t: "text", o: o_a}, %{p: p, t: "text", o: o_b}),
+    do: [%{p: p, t: "text", o: Text.compose(o_a, o_b)}]
 
   # na/na
-  def join(%{p: p, na: na_a}, %{p: p, na: na_b}) do
-    [%{p: p, na: na_a + na_b}]
-  end
+  def join(%{p: p, na: na_a}, %{p: p, na: na_b}),
+    do: [%{p: p, na: na_a + na_b}]
 
   # list replace/list replace
-  def join(%{p: p, ld: ld, li: li}, %{p: p, ld: li, li: li_b}) do
-    [%{p: p, ld: ld, li: li_b}]
-  end
+  def join(%{p: p, ld: ld, li: li}, %{p: p, ld: li, li: li_b}),
+    do: [%{p: p, ld: ld, li: li_b}]
 
   # list replace/list delete
-  def join(%{p: p, ld: ld, li: li}, %{p: p, ld: li}) do
-    [%{p: p, ld: ld}]
-  end
+  def join(%{p: p, ld: ld, li: li}, %{p: p, ld: li}),
+    do: [%{p: p, ld: ld}]
 
   # list replace/list insert
-  def join(%{p: p, ld: ld, li: li}, %{p: p, li: li_b}) do
-    [%{p: p, ld: ld, li: li}, %{p: p, li: li_b}]
-  end
+  def join(%{p: p, ld: ld, li: li}, %{p: p, li: li_b}),
+    do: [%{p: p, ld: ld, li: li}, %{p: p, li: li_b}]
 
   # list delete/list replace
-  def join(%{p: p, ld: ld}, %{p: p, ld: ld_b, li: li}) do
-    [%{p: p, ld: ld}, %{p: p, ld: ld_b, li: li}]
-  end
+  def join(comp_a = %{p: p, ld: _}, comp_b = %{p: p, ld: _, li: _}),
+    do: [comp_a, comp_b]
 
   # list delete/list delete
-  def join(%{p: p, ld: ld}, %{p: p, ld: ld_b}) do
-    [%{p: p, ld: ld}, %{p: p, ld: ld_b}]
-  end
+  def join(comp_a = %{p: p, ld: _}, comp_b = %{p: p, ld: _}),
+    do: [comp_a, comp_b]
 
   # list delete/list insert
-  def join(%{p: p, ld: ld}, %{p: p, li: li}) do
-    [%{p: p, ld: ld, li: li}]
-  end
+  def join(%{p: p, ld: ld}, %{p: p, li: li}),
+    do: [%{p: p, ld: ld, li: li}]
 
   # list insert/list replace
-  def join(%{p: p, li: li}, %{p: p, ld: li, li: li_b}) do
-    [%{p: p, li: li_b}]
-  end
+  def join(%{p: p, li: li}, %{p: p, ld: li, li: li_b}),
+    do: [%{p: p, li: li_b}]
 
   # list insert/list delete
-  def join(%{p: p, li: li}, %{p: p, ld: li}) do
-    []
-  end
+  def join(%{p: p, li: li}, %{p: p, ld: li}),
+    do: []
 
   # list insert/list insert
-  def join(%{p: p, li: li}, %{p: p, li: li_b}) do
-    [%{p: p, li: li}, %{p: p, li: li_b}]
-  end
+  def join(comp_a = %{p: p, li: _}, comp_b = %{p: p, li: _}),
+    do: [comp_a, comp_b]
 
   # object replace/object replace
-  def join(%{p: p, od: od, oi: oi}, %{p: p, od: oi, oi: oi_b}) do
-    [%{p: p, od: od, oi: oi_b}]
-  end
+  def join(%{p: p, od: od, oi: oi}, %{p: p, od: oi, oi: oi_b}),
+    do: [%{p: p, od: od, oi: oi_b}]
 
   # object replace/object delete
-  def join(%{p: p, od: od, oi: oi}, %{p: p, od: oi}) do
-    [%{p: p, od: od}]
-  end
+  def join(%{p: p, od: od, oi: oi}, %{p: p, od: oi}),
+    do: [%{p: p, od: od}]
 
   # object replace/object insert
-  def join(%{p: p, od: od, oi: oi}, %{p: p, oi: oi_b}) do
-    [%{p: p, od: od, oi: oi}, %{p: p, oi: oi_b}]
-  end
+  def join(comp_a = %{p: p, od: _, oi: _}, comp_b = %{p: p, oi: _}),
+    do: [comp_a, comp_b]
 
   # object delete/object replace
-  def join(%{p: p, od: od}, %{p: p, od: od_b, oi: oi}) do
-    [%{p: p, od: od}, %{p: p, od: od_b, oi: oi}]
-  end
+  def join(comp_a = %{p: p, od: _}, comp_b = %{p: p, od: _, oi: _}),
+    do: [comp_a, comp_b]
 
   # object delete/object delete
-  def join(%{p: p, od: od}, %{p: p, od: od_b}) do
-    [%{p: p, od: od}, %{p: p, od: od_b}]
-  end
+  def join(comp_a = %{p: p, od: _}, comp_b = %{p: p, od: _}),
+    do: [comp_a, comp_b]
 
   # object delete/object insert
-  def join(%{p: p, od: od}, %{p: p, oi: oi}) do
-    [%{p: p, od: od, oi: oi}]
-  end
+  def join(%{p: p, od: od}, %{p: p, oi: oi}),
+    do: [%{p: p, od: od, oi: oi}]
 
   # object insert/object replace
-  def join(%{p: p, oi: oi}, %{p: p, od: oi, oi: oi_b}) do
-    [%{p: p, oi: oi_b}]
-  end
+  def join(%{p: p, oi: oi}, %{p: p, od: oi, oi: oi_b}),
+    do: [%{p: p, oi: oi_b}]
 
   # object insert/object delete
-  def join(%{p: p, oi: oi}, %{p: p, od: oi}) do
-    []
-  end
+  def join(%{p: p, oi: oi}, %{p: p, od: oi}),
+    do: []
 
   # object insert/object insert
-  def join(%{p: p, oi: oi}, %{p: p, oi: oi_b}) do
-    [%{p: p, oi: oi}, %{p: p, oi: oi_b}]
-  end
+  def join(comp_a = %{p: p, oi: _}, comp_b = %{p: p, oi: _}),
+    do: [comp_a, comp_b]
 
   # else
-  def join(comp_a, comp_b) do
-    [comp_a, comp_b]
-  end
+  def join(comp_a, comp_b),
+    do: [comp_a, comp_b]
 end

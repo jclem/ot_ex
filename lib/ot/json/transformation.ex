@@ -22,8 +22,8 @@ defmodule OT.JSON.Transformation do
     |> Enum.reverse
   end
 
-  @spec do_transform(Operation.t, Component.t, OT.Type.side) :: Operation.t
-  defp do_transform(op, _comp, _side) do
-    op
+  @spec do_transform(Component.t, Component.t, OT.Type.side) :: Component.t
+  defp do_transform(comp_a, _comp_b, _side) do
+    comp_a
   end
 end
