@@ -14,6 +14,10 @@ defmodule OT.JSON.Transformation do
   """
   @spec transform(Operation.t, Operation.t, OT.Type.side) :: Operation.t
   def transform(op_a, op_b, side) do
-    op_a
+    Enum.reduce(op_a, [], fn (comp_a, new_op) ->
+      comp_a = Enum.reduce(op_b, comp_a, &do_transform(&2, &1, side))
+      [comp_a | new_op]
+    end)
+    |> Enum.reverse
   end
 end
