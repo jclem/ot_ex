@@ -16,7 +16,8 @@ defmodule OT.JSON.Component do
   """
 
   alias OT.JSON
-  alias OT.Text.Component, as: TextComponent
+  alias JSON.Operation
+  alias OT.Text.Operation, as: TextOperation
 
   @typedoc "A key pointing to a location in an object"
   @type key :: String.t
@@ -112,5 +113,11 @@ defmodule OT.JSON.Component do
   def invert(%{p: p, na: na}),
     do: %{p: p, na: na * -1}
   def invert(%{p: p, t: "text", o: o}),
-    do: %{p: p, t: "text", o: TextComponent.invert(o)}
+    do: %{p: p, t: "text", o: TextOperation.invert(o)}
+
+  # @doc """
+  # Join two components into an operation, possibly combining them into a single
+  # component.
+  # """
+  # @spec join(t, t) :: Operation.t
 end

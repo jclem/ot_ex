@@ -16,6 +16,6 @@ defmodule OT.JSON.Composition do
   """
   @spec compose(Operation.t, Operation.t) :: Operation.t
   def compose(op_a, op_b) do
-    op_a ++ op_b
+    Enum.reduce(op_b, op_a, &Operation.append(&2, &1))
   end
 end

@@ -22,11 +22,11 @@ defmodule OT.Text.Operation do
   @spec append(t, Component.t) :: t
   def append([], comp), do: [comp]
   def append(op, comp) do
-    last_component = List.last(op)
-
     if Component.no_op?(comp) do
       op
     else
+      last_component = List.last(op)
+
       op
       |> Enum.slice(0..-2)
       |> Kernel.++(Component.join(last_component, comp))

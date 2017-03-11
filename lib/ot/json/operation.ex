@@ -11,6 +11,25 @@ defmodule OT.JSON.Operation do
   @type t :: [Component.t]
 
   @doc """
+  Append a component to an operation.
+
+  ## Example
+
+      iex> OT.JSON.Operation.append([%{p: [0], na: 1}], %{p: [0], na: 1})
+      [%{p: [0], na: 2}]
+  """
+  @spec append(t, Component.t) :: t
+  def append([], comp), do: comp
+
+  def append(op, comp) do
+    last_component = List.last(op)
+
+    op
+    |> Enum.slice(0..-2)
+    |> Kernel.++(Component.join(last_component, comp))
+  end
+
+  @doc """
   Invert an operation.
 
   ## Example
