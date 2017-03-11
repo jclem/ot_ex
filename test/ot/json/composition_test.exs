@@ -5,9 +5,9 @@ defmodule OT.JSON.CompositionTest do
 
   alias OT.JSON.Composition
 
-  test "composes two operations by concatenating them" do
-    op_a = [%{p: [0], od: 1}]
-    op_b = [%{p: [0], oi: 2}]
-    assert Composition.compose(op_a, op_b) == op_a ++ op_b
+  test "composes two operations" do
+    op_a = [%{p: [0], od: 1, oi: 2}]
+    op_b = [%{p: [0], od: 2, oi: 3}]
+    assert Composition.compose(op_a, op_b) == [%{p: [0], od: 1, oi: 3}]
   end
 end

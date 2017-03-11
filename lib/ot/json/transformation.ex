@@ -4,7 +4,7 @@ defmodule OT.JSON.Transformation do
   operation becomes causally dependent on the transforming operation.
   """
 
-  alias OT.JSON.Operation
+  alias OT.JSON.{Component, Operation}
 
   @doc """
   Transform an operation against another concurrent operation.
@@ -14,10 +14,16 @@ defmodule OT.JSON.Transformation do
   """
   @spec transform(Operation.t, Operation.t, OT.Type.side) :: Operation.t
   def transform(op_a, op_b, side) do
-    Enum.reduce(op_a, [], fn (comp_a, new_op) ->
-      # comp_a = Enum.reduce(op_b, comp_a, &do_transform(&2, &1, side))
+    op_a
+    |> Enum.reduce([], fn (comp_a, new_op) ->
+      comp_a = Enum.reduce(op_b, comp_a, &do_transform(&2, &1, side))
       [comp_a | new_op]
     end)
     |> Enum.reverse
+  end
+
+  @spec do_transform(Operation.t, Component.t, OT.Type.side) :: Operation.t
+  defp do_transform(op, _comp, _side) do
+    op
   end
 end
