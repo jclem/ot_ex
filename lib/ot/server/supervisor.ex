@@ -13,10 +13,7 @@ defmodule OT.Server.Supervisor do
   def init(opts) do
     :ets.new(:ot_types, [:named_table, {:read_concurrency, true}])
     Enum.each(opts[:ot_types], &insert_ot_type/1)
-
-    Supervisor.init([
-      child_spec(opts),
-    ], strategy: :one_for_one, name: __MODULE__)
+    supervise([child_spec(opts)], strategy: :one_for_one)
   end
 
   defp child_spec(opts) do
