@@ -4,7 +4,6 @@ defmodule OT.Server do
   """
 
   use GenServer
-  @behaviour GenServer
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -18,14 +17,14 @@ defmodule OT.Server do
     :ets.insert(:ot_types, key_type)
   end
 
-  # Callbacks
-
+  @impl true
   def init(opts) do
     :ets.new(:ot_types, [:named_table, {:read_concurrency, true}])
     Enum.each(opts[:ot_types], &insert_ot_type/1)
     {:ok, opts}
   end
 
+  @impl true
   def handle_call({:submit, doc_id, op}, _from, opts) do
     adapter = opts[:adapter]
     result = OT.Server.Impl.submit(adapter, doc_id, op, opts[:max_retries])
