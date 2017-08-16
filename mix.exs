@@ -36,7 +36,8 @@ defmodule OT.Mixfile do
   end
 
   defp deps do
-    [{:ex_doc, "~> 0.14", only: [:dev]},
+    [{:poolboy, "~> 1.5"},
+     {:ex_doc, "~> 0.14", only: [:dev]},
      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
      {:credo, "~> 0.8", only: [:dev, :test]}]
   end
