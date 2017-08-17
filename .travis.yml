@@ -5,3 +5,4 @@ elixir:
 otp_release:
   - 20.0
   - 19.3
+script: mix test --include slow_fuzz
