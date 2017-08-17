@@ -1,4 +1,4 @@
-# OT
+# [OT](https://hexdocs.pm/ot_ex) [![Build Status](https://travis-ci.org/jclem/ot_ex.svg?branch=master)](https://travis-ci.org/jclem/ot_ex)
 
 This Elixir library contains an implementation of
 [operational transformation][ot] for strings. It is the same general algorithm
