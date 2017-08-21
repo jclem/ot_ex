@@ -2,7 +2,10 @@
 
 This Elixir library contains an implementation of
 [operational transformation][ot] for strings. It is the same general algorithm
-as [ottypes/text][ot_text], but made invertible.
+as [ottypes/text][ot_text], but made invertible. 
+
+I am also working on an implementation of a generic OT server over at
+[jclem/ot_server][ot_server].
 
 ## Installation
 
@@ -32,4 +35,5 @@ run with `mix lint`.
 [credo]: https://github.com/rrrene/credo
 [dialyxir]: https://github.com/jeremyjh/dialyxir
 [ot]: https://en.wikipedia.org/wiki/Operational_transformation
+[ot_server]: https://github.com/jclem/ot_server
 [ot_text]: https://github.com/ottypes/text
