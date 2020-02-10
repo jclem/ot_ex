@@ -1,8 +1,8 @@
 defmodule OT.Mixfile do
   use Mix.Project
 
-  @version "0.1.0"
-  @github_url "https://github.com/jclem/ot_ex"
+  @version "0.1.1"
+  @github_url "https://github.com/codesandbox/ot_ex"
 
   def project do
     [
