@@ -7,16 +7,20 @@ defmodule OT.Text.Component do
   - `5`:            Retain 5 characters of the text
   - `%{i:"Hello"}`: Insert the string "Hello"
   - `%{d:"World"}`: Delete the string "World"
+
+  A delete component can also be an integer for brevity:
+  - `%{d:5}`: Delete the string of 5 length
   """
 
   alias OT.Text
   alias Text.Operation
+  alias Text.JSString
 
   @typedoc """
   A delete component, in which a string of zero or more characters are deleted
-  from the text
+  from the text. This can also be an integer
   """
-  @type delete :: %{d: Text.datum()}
+  @type delete :: %{d: Text.datum() | non_neg_integer}
 
   @typedoc """
   An insert component, in which a string of zero or more characters are inserted
@@ -77,8 +81,8 @@ defmodule OT.Text.Component do
   """
   @spec length(t) :: non_neg_integer
   def length(comp) when is_integer(comp), do: comp
-  def length(%{d: del}), do: String.length(del)
-  def length(%{i: ins}), do: String.length(ins)
+  def length(%{d: del}), do: JSString.length(del)
+  def length(%{i: ins}), do: JSString.length(ins)
 
   @doc """
   Determine the type of a component.
@@ -182,11 +186,11 @@ defmodule OT.Text.Component do
   end
 
   def split(%{d: del}, index) do
-    {%{d: String.slice(del, 0, index)}, %{d: String.slice(del, index..-1)}}
+    {%{d: JSString.slice(del, 0, index)}, %{d: JSString.slice(del, index, -1)}}
   end
 
   def split(%{i: ins}, index) do
-    {%{i: String.slice(ins, 0, index)}, %{i: String.slice(ins, index..-1)}}
+    {%{i: JSString.slice(ins, 0, index)}, %{i: JSString.slice(ins, index, -1)}}
   end
 
   @doc false
@@ -201,7 +205,7 @@ defmodule OT.Text.Component do
     do: %{i: Text.init_random(:rand.uniform(16))}
 
   defp do_random(:retain, text),
-    do: String.length(text)
+    do: JSString.length(text)
 
   @spec random_type :: type
   defp random_type, do: Enum.random([:delete, :insert, :retain])

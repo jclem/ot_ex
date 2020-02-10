@@ -4,6 +4,7 @@ defmodule OT.Text.Operation do
   """
 
   alias OT.Text.Component
+  alias OT.Text.JSString
 
   @typedoc """
   An operation, which is a list consisting of `t:OT.Text.Component.retain/0`,
@@ -77,8 +78,8 @@ defmodule OT.Text.Operation do
   defp do_random("", op), do: op
 
   defp do_random(text, op) do
-    split_index = :rand.uniform(String.length(text) + 1) - 1
-    {chunk, new_text} = String.split_at(text, split_index)
+    split_index = :rand.uniform(JSString.length(text) + 1) - 1
+    {chunk, new_text} = JSString.split_at(text, split_index)
     comp = Component.random(chunk)
 
     if Component.type(comp) == :insert do

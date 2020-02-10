@@ -33,6 +33,22 @@ defmodule OT.Text.Transformation do
   @spec do_transform(Scanner.output(), OT.Type.side(), Operation.t()) :: Operation.t()
   defp do_transform(next_pair, side, result \\ [])
 
+  # These two exhausted / ... are for making sure that the retains are preserved
+
+  # exhausted / insert
+  defp do_transform({{nil, _}, {head_b = %{i: _}, tail_b}}, side, result) do
+    {[], tail_b}
+    |> next
+    |> do_transform(side, Operation.append(result, Component.length(head_b)))
+  end
+
+  # exhausted / retain
+  defp do_transform({{nil, _}, {ret, tail_b}}, side, result) when is_integer(ret) do
+    {[], tail_b}
+    |> next
+    |> do_transform(side, Operation.append(result, ret))
+  end
+
   # Operation A is exhausted
   defp do_transform({{nil, _}, _}, _, result) do
     result
