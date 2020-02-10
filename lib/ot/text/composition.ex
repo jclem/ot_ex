@@ -17,14 +17,14 @@ defmodule OT.Text.Composition do
       iex> OT.Text.Composition.compose([%{i: "Bar"}], [%{i: "Foo"}])
       [%{i: "FooBar"}]
   """
-  @spec compose(Operation.t, Operation.t) :: Operation.t
+  @spec compose(Operation.t(), Operation.t()) :: Operation.t()
   def compose(op_a, op_b) do
     {op_a, op_b}
     |> next
     |> do_compose
   end
 
-  @spec do_compose(Scanner.output, Operation.t) :: Operation.t
+  @spec do_compose(Scanner.output(), Operation.t()) :: Operation.t()
   defp do_compose(next_pair, result \\ [])
 
   # Both operations are exhausted.
@@ -46,16 +46,21 @@ defmodule OT.Text.Composition do
   end
 
   # _ / insert
-  defp do_compose({{head_a, tail_a},
-                   {head_b = %{i: _}, tail_b}}, result) do
+  defp do_compose(
+         {{head_a, tail_a}, {head_b = %{i: _}, tail_b}},
+         result
+       ) do
     {[head_a | tail_a], tail_b}
     |> next
     |> do_compose(Operation.append(result, head_b))
   end
 
   # insert / retain
-  defp do_compose({{head_a = %{i: _}, tail_a},
-                   {retain_b, tail_b}}, result) when is_integer(retain_b) do
+  defp do_compose(
+         {{head_a = %{i: _}, tail_a}, {retain_b, tail_b}},
+         result
+       )
+       when is_integer(retain_b) do
     {tail_a, tail_b}
     |> next
     |> do_compose(Operation.append(result, head_a))
@@ -77,8 +82,10 @@ defmodule OT.Text.Composition do
   end
 
   # retain / delete
-  defp do_compose({{retain_a, tail_a},
-                   {head_b = %{d: _}, tail_b}}, result)
+  defp do_compose(
+         {{retain_a, tail_a}, {head_b = %{d: _}, tail_b}},
+         result
+       )
        when is_integer(retain_a) do
     {tail_a, tail_b}
     |> next
@@ -86,8 +93,10 @@ defmodule OT.Text.Composition do
   end
 
   # delete / retain
-  defp do_compose({{head_a = %{d: _}, tail_a},
-                   {retain_b, tail_b}}, result)
+  defp do_compose(
+         {{head_a = %{d: _}, tail_a}, {retain_b, tail_b}},
+         result
+       )
        when is_integer(retain_b) do
     {tail_a, [retain_b | tail_b]}
     |> next
@@ -95,13 +104,15 @@ defmodule OT.Text.Composition do
   end
 
   # delete / delete
-  defp do_compose({{head_a = %{d: _}, tail_a},
-                   {head_b = %{d: _}, tail_b}}, result) do
+  defp do_compose(
+         {{head_a = %{d: _}, tail_a}, {head_b = %{d: _}, tail_b}},
+         result
+       ) do
     {tail_a, [head_b | tail_b]}
     |> next
     |> do_compose(Operation.append(result, head_a))
   end
 
-  @spec next(Scanner.input) :: Scanner.output
+  @spec next(Scanner.input()) :: Scanner.output()
   defp next(scanner_input), do: Scanner.next(scanner_input, :delete)
 end

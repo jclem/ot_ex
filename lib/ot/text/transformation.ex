@@ -23,14 +23,14 @@ defmodule OT.Text.Transformation do
   operation came later. This is important when deciding whether it is acceptable
   to break up insert components from one operation or the other.
   """
-  @spec transform(Operation.t, Operation.t, OT.Type.side) :: Operation.t
+  @spec transform(Operation.t(), Operation.t(), OT.Type.side()) :: Operation.t()
   def transform(op_a, op_b, side) do
     {op_a, op_b}
     |> next
     |> do_transform(side)
   end
 
-  @spec do_transform(Scanner.output, OT.Type.side, Operation.t) :: Operation.t
+  @spec do_transform(Scanner.output(), OT.Type.side(), Operation.t()) :: Operation.t()
   defp do_transform(next_pair, side, result \\ [])
 
   # Operation A is exhausted
@@ -46,40 +46,36 @@ defmodule OT.Text.Transformation do
   end
 
   # insert / insert / left
-  defp do_transform({{head_a = %{i: _}, tail_a},
-                     {head_b = %{i: _}, tail_b}}, :left, result) do
+  defp do_transform({{head_a = %{i: _}, tail_a}, {head_b = %{i: _}, tail_b}}, :left, result) do
     {tail_a, [head_b | tail_b]}
     |> next
     |> do_transform(:left, Operation.append(result, head_a))
   end
 
   # insert / insert / right
-  defp do_transform({{head_a = %{i: _}, tail_a},
-                     {head_b = %{i: _}, tail_b}}, :right, result) do
+  defp do_transform({{head_a = %{i: _}, tail_a}, {head_b = %{i: _}, tail_b}}, :right, result) do
     {[head_a | tail_a], tail_b}
     |> next
     |> do_transform(:right, Operation.append(result, Component.length(head_b)))
   end
 
   # insert / retain
-  defp do_transform({{head_a = %{i: _}, tail_a},
-                     {head_b, tail_b}}, side, result) when is_integer(head_b) do
+  defp do_transform({{head_a = %{i: _}, tail_a}, {head_b, tail_b}}, side, result)
+       when is_integer(head_b) do
     {tail_a, [head_b | tail_b]}
     |> next
     |> do_transform(side, Operation.append(result, head_a))
   end
 
   # insert / delete
-  defp do_transform({{head_a = %{i: _}, tail_a},
-                     {head_b = %{d: _}, tail_b}}, side, result) do
+  defp do_transform({{head_a = %{i: _}, tail_a}, {head_b = %{d: _}, tail_b}}, side, result) do
     {tail_a, [head_b | tail_b]}
     |> next
     |> do_transform(side, Operation.append(result, head_a))
   end
 
   # retain / insert
-  defp do_transform({{head_a, tail_a},
-                     {head_b = %{i: _}, tail_b}}, side, result)
+  defp do_transform({{head_a, tail_a}, {head_b = %{i: _}, tail_b}}, side, result)
        when is_integer(head_a) do
     {[head_a | tail_a], tail_b}
     |> next
@@ -87,8 +83,7 @@ defmodule OT.Text.Transformation do
   end
 
   # retain / retain
-  defp do_transform({{head_a, tail_a},
-                     {head_b, tail_b}}, side, result)
+  defp do_transform({{head_a, tail_a}, {head_b, tail_b}}, side, result)
        when is_integer(head_a) and is_integer(head_b) do
     {tail_a, tail_b}
     |> next
@@ -96,8 +91,7 @@ defmodule OT.Text.Transformation do
   end
 
   # retain / delete
-  defp do_transform({{head_a, tail_a},
-                     {%{d: _}, tail_b}}, side, result)
+  defp do_transform({{head_a, tail_a}, {%{d: _}, tail_b}}, side, result)
        when is_integer(head_a) do
     {tail_a, tail_b}
     |> next
@@ -105,29 +99,27 @@ defmodule OT.Text.Transformation do
   end
 
   # delete / insert
-  defp do_transform({{head_a = %{d: _}, tail_a},
-                     {head_b = %{i: _}, tail_b}}, side, result) do
+  defp do_transform({{head_a = %{d: _}, tail_a}, {head_b = %{i: _}, tail_b}}, side, result) do
     {[head_a | tail_a], tail_b}
     |> next
     |> do_transform(side, Operation.append(result, Component.length(head_b)))
   end
 
   # delete / retain
-  defp do_transform({{head_a = %{d: _}, tail_a},
-                     {head_b, tail_b}}, side, result) when is_integer(head_b) do
+  defp do_transform({{head_a = %{d: _}, tail_a}, {head_b, tail_b}}, side, result)
+       when is_integer(head_b) do
     {tail_a, tail_b}
     |> next
     |> do_transform(side, Operation.append(result, head_a))
   end
 
   # delete / delete
-  defp do_transform({{%{d: _}, tail_a},
-                     {%{d: _}, tail_b}}, side, result) do
+  defp do_transform({{%{d: _}, tail_a}, {%{d: _}, tail_b}}, side, result) do
     {tail_a, tail_b}
     |> next
     |> do_transform(side, result)
   end
 
-  @spec next(Scanner.input) :: Scanner.output
+  @spec next(Scanner.input()) :: Scanner.output()
   defp next(scanner_input), do: Scanner.next(scanner_input, :insert)
 end

@@ -78,12 +78,15 @@ defmodule OT.Fuzzer do
         op_a_prime = unquote(mod).transform(op_a, op_b, side)
         op_b_prime = unquote(mod).transform(op_b, op_a, other_side)
 
-        data_a = initial_value
-                 |> unquote(mod).apply!(op_a)
-                 |> unquote(mod).apply!(op_b_prime)
-        data_b = initial_value
-                 |> unquote(mod).apply!(op_b)
-                 |> unquote(mod).apply!(op_a_prime)
+        data_a =
+          initial_value
+          |> unquote(mod).apply!(op_a)
+          |> unquote(mod).apply!(op_b_prime)
+
+        data_b =
+          initial_value
+          |> unquote(mod).apply!(op_b)
+          |> unquote(mod).apply!(op_a_prime)
 
         assert data_a == data_b
       end

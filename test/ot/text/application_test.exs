@@ -15,7 +15,7 @@ defmodule OT.Text.ApplicationTest do
 
   test "applies an implicit retain at the end of an operation" do
     assert Application.apply("Foo Baz", [3, %{i: " Bar"}]) ==
-           {:ok, "Foo Bar Baz"}
+             {:ok, "Foo Bar Baz"}
   end
 
   test "returns an error if a retain is too long" do
@@ -24,6 +24,6 @@ defmodule OT.Text.ApplicationTest do
 
   test "returns an error if a delete does not match" do
     assert Application.apply("Fooz", [3, %{d: "x"}]) ==
-           {:error, :delete_mismatch}
+             {:error, :delete_mismatch}
   end
 end

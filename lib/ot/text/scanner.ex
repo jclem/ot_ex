@@ -12,13 +12,13 @@ defmodule OT.Text.Scanner do
   @typedoc """
   The input to the scanner—a tuple containing two operations
   """
-  @type input :: {Operation.t, Operation.t}
+  @type input :: {Operation.t(), Operation.t()}
 
   @typedoc """
   An operation's next scanned full or partial component, and its resulting
   tail operation
   """
-  @type operation_split :: {Component.t | nil, Operation.t}
+  @type operation_split :: {Component.t() | nil, Operation.t()}
 
   @typedoc """
   A tuple representing the new head component and tail operation of the two
@@ -65,19 +65,24 @@ defmodule OT.Text.Scanner do
     cond do
       Component.no_op?(head_a) && Component.no_op?(head_b) ->
         next({tail_a, tail_b}, skip_type)
+
       Component.no_op?(head_a) ->
         next({tail_a, [head_b | tail_b]}, skip_type)
+
       Component.no_op?(head_b) ->
         next({[head_a | tail_a], tail_b}, skip_type)
+
       true ->
-        do_next(result,
-                Component.compare(head_a, head_b),
-                Component.type(head_a) == skip_type)
+        do_next(
+          result,
+          Component.compare(head_a, head_b),
+          Component.type(head_a) == skip_type
+        )
     end
   end
 
   # A > B and is splittable, so split A
-  @spec do_next(input, Component.comparison, boolean) :: output
+  @spec do_next(input, Component.comparison(), boolean) :: output
   defp do_next({[head_a | tail_a], [head_b | tail_b]}, :gt, false) do
     {head_a, remainder_a} = Component.split(head_a, Component.length(head_b))
     {{head_a, [remainder_a | tail_a]}, {head_b, tail_b}}

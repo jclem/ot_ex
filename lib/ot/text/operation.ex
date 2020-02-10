@@ -9,7 +9,7 @@ defmodule OT.Text.Operation do
   An operation, which is a list consisting of `t:OT.Text.Component.retain/0`,
   `t:OT.Text.Component.insert/0`, and `t:OT.Text.Component.delete/0` components
   """
-  @type t :: [Component.t]
+  @type t :: [Component.t()]
 
   @doc """
   Append a component to an operation.
@@ -19,8 +19,9 @@ defmodule OT.Text.Operation do
       iex> OT.Text.Operation.append([%{i: "Foo"}], %{i: "Bar"})
       [%{i: "FooBar"}]
   """
-  @spec append(t, Component.t) :: t
+  @spec append(t, Component.t()) :: t
   def append([], comp), do: [comp]
+
   def append(op, comp) do
     last_component = List.last(op)
 
@@ -63,14 +64,14 @@ defmodule OT.Text.Operation do
   end
 
   @doc false
-  @spec random(OT.Text.datum) :: t
+  @spec random(OT.Text.datum()) :: t
   def random(text) do
     text
     |> do_random
-    |> Enum.reverse
+    |> Enum.reverse()
   end
 
-  @spec do_random(String.t, t) :: t
+  @spec do_random(String.t(), t) :: t
   defp do_random(text, op \\ [])
 
   defp do_random("", op), do: op

@@ -5,16 +5,17 @@ defmodule OT.Mixfile do
   @github_url "https://github.com/jclem/ot_ex"
 
   def project do
-    [app: :ot_ex,
-     version: @version,
-     description: description(),
-     package: package(),
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     aliases: aliases(),
-     dialyzer: [flags: ~w(-Werror_handling
+    [
+      app: :ot_ex,
+      version: @version,
+      description: description(),
+      package: package(),
+      elixir: "~> 1.4",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      aliases: aliases(),
+      dialyzer: [flags: ~w(-Werror_handling
                           -Wrace_conditions
                           -Wunderspecs
                           -Wunmatched_returns)],
@@ -23,7 +24,8 @@ defmodule OT.Mixfile do
       name: "OT",
       homepage_url: @github_url,
       source_url: @github_url,
-      docs: docs()]
+      docs: docs()
+    ]
   end
 
   defp aliases do
@@ -36,9 +38,12 @@ defmodule OT.Mixfile do
   end
 
   defp deps do
-    [{:ex_doc, "~> 0.14", only: [:dev]},
-     {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
-     {:credo, "~> 0.8", only: [:dev, :test]}]
+    [
+      {:ex_doc, "~> 0.14", only: [:dev]},
+      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
+      {:credo, "~> 0.8", only: [:dev, :test]},
+      {:iconv, "~> 1.0.10"}
+    ]
   end
 
   defp description do
@@ -49,14 +54,20 @@ defmodule OT.Mixfile do
   end
 
   defp docs do
-    [source_ref: "v#{@version}",
-     extras: ["README.md": [filename: "README.md", title: "Readme"],
-              "LICENSE.md": [filename: "LICENSE.md", title: "License"]]]
+    [
+      source_ref: "v#{@version}",
+      extras: [
+        "README.md": [filename: "README.md", title: "Readme"],
+        "LICENSE.md": [filename: "LICENSE.md", title: "License"]
+      ]
+    ]
   end
 
   defp package do
-    [maintainers: ["Jonathan Clem <jonathan@jclem.net>"],
-     licenses: ["ISC"],
-     links: %{"GitHub" => @github_url}]
+    [
+      maintainers: ["Jonathan Clem <jonathan@jclem.net>"],
+      licenses: ["ISC"],
+      links: %{"GitHub" => @github_url}
+    ]
   end
 end

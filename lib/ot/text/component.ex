@@ -16,13 +16,13 @@ defmodule OT.Text.Component do
   A delete component, in which a string of zero or more characters are deleted
   from the text
   """
-  @type delete :: %{d: Text.datum}
+  @type delete :: %{d: Text.datum()}
 
   @typedoc """
   An insert component, in which a string of zero or more characters are inserted
   into the text
   """
-  @type insert :: %{i: Text.datum}
+  @type insert :: %{i: Text.datum()}
 
   @typedoc """
   A retain component, in which a number of characters in the text are skipped
@@ -131,14 +131,17 @@ defmodule OT.Text.Component do
       iex> OT.Text.Component.join(%{i: "Foo"}, %{i: "Bar"})
       [%{i: "FooBar"}]
   """
-  @spec join(t, t) :: Operation.t
+  @spec join(t, t) :: Operation.t()
   def join(retain_a, retain_b)
       when is_integer(retain_a) and is_integer(retain_b),
-    do: [retain_a + retain_b]
+      do: [retain_a + retain_b]
+
   def join(%{i: ins_a}, %{i: ins_b}),
     do: [%{i: ins_a <> ins_b}]
+
   def join(%{d: del_a}, %{d: del_b}),
     do: [%{d: del_a <> del_b}]
+
   def join(comp_a, comp_b),
     do: [comp_a, comp_b]
 
@@ -179,24 +182,24 @@ defmodule OT.Text.Component do
   end
 
   def split(%{d: del}, index) do
-    {%{d: String.slice(del, 0, index)},
-     %{d: String.slice(del, index..-1)}}
+    {%{d: String.slice(del, 0, index)}, %{d: String.slice(del, index..-1)}}
   end
 
   def split(%{i: ins}, index) do
-    {%{i: String.slice(ins, 0, index)},
-     %{i: String.slice(ins, index..-1)}}
+    {%{i: String.slice(ins, 0, index)}, %{i: String.slice(ins, index..-1)}}
   end
 
   @doc false
-  @spec random(Text.datum) :: t
+  @spec random(Text.datum()) :: t
   def random(text), do: do_random(random_type(), text)
 
-  @spec do_random(type, Text.datum) :: t
+  @spec do_random(type, Text.datum()) :: t
   defp do_random(:delete, text),
     do: %{d: text}
+
   defp do_random(:insert, _text),
     do: %{i: Text.init_random(:rand.uniform(16))}
+
   defp do_random(:retain, text),
     do: String.length(text)
 

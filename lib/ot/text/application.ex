@@ -10,8 +10,9 @@ defmodule OT.Text.Application do
   The result of an `apply/2` function call, representing either success or error
   in application of an operation
   """
-  @type apply_result :: {:ok, OT.Text.datum}
-                      | {:error, :delete_mismatch | :retain_too_long}
+  @type apply_result ::
+          {:ok, OT.Text.datum()}
+          | {:error, :delete_mismatch | :retain_too_long}
 
   @doc """
   Apply an operation to a piece of text.
@@ -36,13 +37,13 @@ defmodule OT.Text.Application do
     deleted in the text
   - `:retain_too_long` A retain component skipped past the end of the text
   """
-  @spec apply(Text.datum, Operation.t) :: apply_result
+  @spec apply(Text.datum(), Operation.t()) :: apply_result
   def apply(text, op), do: do_apply(text, op)
 
   @doc """
   Same as `apply/2`, but raises if the application fails.
   """
-  @spec apply!(Text.datum, Operation.t) :: Text.datum | no_return
+  @spec apply!(Text.datum(), Operation.t()) :: Text.datum() | no_return
   def apply!(text, op) do
     with {:ok, result} <- __MODULE__.apply(text, op) do
       result
@@ -51,7 +52,7 @@ defmodule OT.Text.Application do
     end
   end
 
-  @spec do_apply(Text.datum, Operation.t, Text.datum) :: apply_result
+  @spec do_apply(Text.datum(), Operation.t(), Text.datum()) :: apply_result
   defp do_apply(text, op, result \\ "")
 
   defp do_apply(text, [], result) do

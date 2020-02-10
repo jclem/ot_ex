@@ -22,7 +22,7 @@ defmodule OT.Text do
   @behaviour OT.Type
 
   @typedoc "A string that this OT type can operate on"
-  @type datum :: String.t
+  @type datum :: String.t()
 
   @doc """
   Initialize a blank text datum.
@@ -40,8 +40,8 @@ defmodule OT.Text do
   @spec init_random(non_neg_integer) :: datum
   def init_random(length \\ 64) do
     length
-    |> :crypto.strong_rand_bytes
-    |> Base.url_encode64
+    |> :crypto.strong_rand_bytes()
+    |> Base.url_encode64()
     |> String.slice(0, length)
   end
 

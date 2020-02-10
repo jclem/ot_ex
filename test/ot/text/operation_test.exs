@@ -31,12 +31,12 @@ defmodule OT.Text.OperationTest do
   describe ".join/2" do
     test "joins two operations with a common terminus type" do
       assert Operation.join([%{i: "Foo"}], [%{i: "Bar"}]) ==
-             [%{i: "FooBar"}]
+               [%{i: "FooBar"}]
     end
 
     test "joins two operations with different terminus types" do
       assert Operation.join([%{i: "Foo"}], [%{d: "Bar"}]) ==
-             [%{i: "Foo"}, %{d: "Bar"}]
+               [%{i: "Foo"}, %{d: "Bar"}]
     end
   end
 
