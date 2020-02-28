@@ -1,0 +1,191 @@
+import { transformNewToOld, transformOldToNew } from ".";
+
+const lineData_OLD = {
+  labels: ["Qty", "More", "Sold", "Restocking", "Misc"],
+  datasets: [
+    {
+      label: "Dataset 1",
+      data: [32100, 23500, 53100, 42300, 12300]
+    },
+    {
+      label: "Dataset 2",
+      data: [34200, 53200, 42300, 21400, 0]
+    },
+    {
+      label: "Dataset 3 long name",
+      data: [41200, 23400, 34210, 1400, 42100]
+    },
+    {
+      label: "Dataset 4 long name",
+      data: [22000, 1200, 9000, 24000, 3000]
+    },
+    {
+      label: "Dataset 5 long name",
+      data: [2412, 30000, 10000, 5000, 31000]
+    },
+    {
+      label: "Dataset 6 long name",
+      data: [0, 20000, 40000, 60000, 80000]
+    }
+  ]
+};
+
+const lineTimeSeriesData_OLD = {
+  datasets: [
+    {
+      label: "Dataset 1",
+      data: [
+        { date: new Date(2019, 0, 1), value: 10000 },
+        { date: new Date(2019, 0, 5), value: 65000 },
+        { date: new Date(2019, 0, 8), value: 10000 },
+        { date: new Date(2019, 0, 13), value: 49213 },
+        { date: new Date(2019, 0, 17), value: 51213 }
+      ]
+    },
+    {
+      label: "Dataset 2",
+      data: [
+        { date: new Date(2019, 0, 2), value: 0 },
+        { date: new Date(2019, 0, 6), value: 57312 },
+        { date: new Date(2019, 0, 8), value: 21432 },
+        { date: new Date(2019, 0, 15), value: 70323 },
+        { date: new Date(2019, 0, 19), value: 21300 }
+      ]
+    },
+    {
+      label: "Dataset 3",
+      data: [
+        { date: new Date(2019, 0, 1), value: 50000 },
+        { date: new Date(2019, 0, 5), value: 15000 },
+        { date: new Date(2019, 0, 8), value: 20000 },
+        { date: new Date(2019, 0, 13), value: 39213 },
+        { date: new Date(2019, 0, 17), value: 61213 }
+      ]
+    },
+    {
+      label: "Dataset 4",
+      data: [
+        { date: new Date(2019, 0, 2), value: 10 },
+        { date: new Date(2019, 0, 6), value: 37312 },
+        { date: new Date(2019, 0, 8), value: 51432 },
+        { date: new Date(2019, 0, 15), value: 40323 },
+        { date: new Date(2019, 0, 19), value: 31300 }
+      ]
+    }
+  ]
+};
+
+///////////////////
+
+const lineData_NEW = [
+  { group: "Dataset 1", y: 32100, x: "Qty" },
+  { group: "Dataset 1", y: 23500, x: "More" },
+  { group: "Dataset 1", y: 53100, x: "Sold" },
+  { group: "Dataset 1", y: 42300, x: "Restocking" },
+  { group: "Dataset 1", y: 12300, x: "Misc" },
+
+  { group: "Dataset 2", y: 34200, x: "Qty" },
+  { group: "Dataset 2", y: 53200, x: "More" },
+  { group: "Dataset 2", y: 42300, x: "Sold" },
+  { group: "Dataset 2", y: 21400, x: "Restocking" },
+  { group: "Dataset 2", y: 0, x: "Misc" },
+
+  { group: "Dataset 3 long name", y: 41200, x: "Qty" },
+  { group: "Dataset 3 long name", y: 23400, x: "More" },
+  { group: "Dataset 3 long name", y: 34210, x: "Sold" },
+  { group: "Dataset 3 long name", y: 1400, x: "Restocking" },
+  { group: "Dataset 3 long name", y: 42100, x: "Misc" },
+
+  { group: "Dataset 4 long name", y: 22000, x: "Qty" },
+  { group: "Dataset 4 long name", y: 1200, x: "More" },
+  { group: "Dataset 4 long name", y: 9000, x: "Sold" },
+  { group: "Dataset 4 long name", y: 24000, x: "Restocking" },
+  { group: "Dataset 4 long name", y: 3000, x: "Misc" },
+
+  { group: "Dataset 5 long name", y: 2412, x: "Qty" },
+  { group: "Dataset 5 long name", y: 30000, x: "More" },
+  { group: "Dataset 5 long name", y: 10000, x: "Sold" },
+  { group: "Dataset 5 long name", y: 5000, x: "Restocking" },
+  { group: "Dataset 5 long name", y: 31000, x: "Misc" },
+
+  { group: "Dataset 6 long name", y: 0, x: "Qty" },
+  { group: "Dataset 6 long name", y: 20000, x: "More" },
+  { group: "Dataset 6 long name", y: 40000, x: "Sold" },
+  { group: "Dataset 6 long name", y: 60000, x: "Restocking" },
+  { group: "Dataset 6 long name", y: 80000, x: "Misc" }
+];
+
+const lineTimeSeriesData_NEW = [
+  { group: "Dataset 1", x: new Date(2019, 0, 1), y: 10000 },
+  { group: "Dataset 1", x: new Date(2019, 0, 5), y: 65000 },
+  { group: "Dataset 1", x: new Date(2019, 0, 8), y: 10000 },
+  { group: "Dataset 1", x: new Date(2019, 0, 13), y: 49213 },
+  { group: "Dataset 1", x: new Date(2019, 0, 17), y: 51213 },
+
+  { group: "Dataset 2", x: new Date(2019, 0, 2), y: 0 },
+  { group: "Dataset 2", x: new Date(2019, 0, 6), y: 57312 },
+  { group: "Dataset 2", x: new Date(2019, 0, 8), y: 21432 },
+  { group: "Dataset 2", x: new Date(2019, 0, 15), y: 70323 },
+  { group: "Dataset 2", x: new Date(2019, 0, 19), y: 21300 },
+
+  { group: "Dataset 3", x: new Date(2019, 0, 1), y: 50000 },
+  { group: "Dataset 3", x: new Date(2019, 0, 5), y: 15000 },
+  { group: "Dataset 3", x: new Date(2019, 0, 8), y: 20000 },
+  { group: "Dataset 3", x: new Date(2019, 0, 13), y: 39213 },
+  { group: "Dataset 3", x: new Date(2019, 0, 17), y: 61213 },
+
+  { group: "Dataset 4", x: new Date(2019, 0, 2), y: 10 },
+  { group: "Dataset 4", x: new Date(2019, 0, 6), y: 37312 },
+  { group: "Dataset 4", x: new Date(2019, 0, 8), y: 51432 },
+  { group: "Dataset 4", x: new Date(2019, 0, 15), y: 40323 },
+  { group: "Dataset 4", x: new Date(2019, 0, 19), y: 31300 }
+];
+
+describe("transformOldToNew", () => {
+  it("works with very simple data structure", () => {
+    const input = {
+      labels: ["Quantity"],
+      datasets: [{ label: "Dataset 1", data: [32100] }]
+    };
+    const expected = [{ group: "Dataset 1", y: 32100, x: "Quantity" }];
+
+    const output = transformOldToNew(input);
+    expect(output).toEqual(expected);
+  });
+
+  it("works with data structure one per group", () => {
+    const input = {
+      labels: ["Quantity"],
+      datasets: [
+        { label: "Dataset 1", data: [32100] },
+        { label: "Dataset 2", data: [2100] }
+      ]
+    };
+    const expected = [
+      { group: "Dataset 1", y: 32100, x: "Quantity" },
+      { group: "Dataset 2", y: 2100, x: "Quantity" }
+    ];
+
+    const output = transformOldToNew(input);
+    expect(output).toEqual(expected);
+  });
+
+  it("works with data structure with > 1 label", () => {
+    const input = {
+      labels: ["Quantity", "Asd"],
+      datasets: [
+        { label: "Dataset 1", data: [32100, 12] },
+        { label: "Dataset 2", data: [2100, 34] }
+      ]
+    };
+    const expected = [
+      { group: "Dataset 1", y: 32100, x: "Quantity" },
+      { group: "Dataset 1", y: 12, x: "Asd" },
+      { group: "Dataset 2", y: 2100, x: "Quantity" },
+      { group: "Dataset 2", y: 34, x: "Asd" }
+    ];
+
+    const output = transformOldToNew(input);
+    expect(output).toEqual(expected);
+  });
+});
