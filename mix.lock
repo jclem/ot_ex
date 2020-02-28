@@ -1,9 +1,9 @@
 %{
-  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
-  "credo": {:hex, :credo, "0.8.3", "efe6e9078de64cefdd25d8df7a97292e29e63f42a8988990340eaf1f40d93224", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}], "hexpm"},
-  "dialyxir": {:hex, :dialyxir, "0.4.3", "a4daeebd0107de10d3bbae2ccb6b8905e69544db1ed5fe9148ad27cd4cb2c0cd", [:mix], [], "hexpm"},
-  "earmark": {:hex, :earmark, "1.1.0", "8c2bf85d725050a92042bc1edf362621004d43ca6241c756f39612084e95487f", [:mix], [], "hexpm"},
-  "ex_doc": {:hex, :ex_doc, "0.14.5", "c0433c8117e948404d93ca69411dd575ec6be39b47802e81ca8d91017a0cf83c", [:mix], [{:earmark, "~> 1.0", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
-  "iconv": {:hex, :iconv, "1.0.10", "fc7de75c0a1fbc1e4ed0c68637ae7464a5dd9eee81710fff26321922d144ecea", [:rebar3], [{:p1_utils, "1.0.13", [hex: :p1_utils, repo: "hexpm", optional: false]}], "hexpm"},
-  "p1_utils": {:hex, :p1_utils, "1.0.13", "176577cafb54a8c2fdc0a7fc62b9a21ab0f66588f4062792cd9e65f3e500bfdb", [:rebar3], [], "hexpm"},
+  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm", "7af5c7e09fe1d40f76c8e4f9dd2be7cebd83909f31fee7cd0e9eadc567da8353"},
+  "credo": {:hex, :credo, "0.8.3", "efe6e9078de64cefdd25d8df7a97292e29e63f42a8988990340eaf1f40d93224", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}], "hexpm", "4bd8ac8bd44b2ef96dee91f1096cbc7a57898d2f1706c84e8a1d8eb893a64d52"},
+  "dialyxir": {:hex, :dialyxir, "0.4.3", "a4daeebd0107de10d3bbae2ccb6b8905e69544db1ed5fe9148ad27cd4cb2c0cd", [:mix], [], "hexpm", "32f6fa58c0a3f685b135fa8e48b00f415c46776b077771a49943c9f8fedf67b9"},
+  "earmark": {:hex, :earmark, "1.1.0", "8c2bf85d725050a92042bc1edf362621004d43ca6241c756f39612084e95487f", [:mix], [], "hexpm", "15e3a816bdc53d12f258ea59d0c1fae9a37da2e70a0cb486edad687f65a36f66"},
+  "ex_doc": {:hex, :ex_doc, "0.14.5", "c0433c8117e948404d93ca69411dd575ec6be39b47802e81ca8d91017a0cf83c", [:mix], [{:earmark, "~> 1.0", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm", "5c30e436a5acfdc2fd8fe6866585fcaf30f434c611d8119d4f3390ced2a550f3"},
+  "iconv": {:hex, :iconv, "1.0.10", "fc7de75c0a1fbc1e4ed0c68637ae7464a5dd9eee81710fff26321922d144ecea", [:rebar3], [{:p1_utils, "1.0.13", [hex: :p1_utils, repo: "hexpm", optional: false]}], "hexpm", "fd9724f78b7659f6def69ac3883a3d2327bc0798898ec378ed2d4798f9e2d503"},
+  "p1_utils": {:hex, :p1_utils, "1.0.13", "176577cafb54a8c2fdc0a7fc62b9a21ab0f66588f4062792cd9e65f3e500bfdb", [:rebar3], [], "hexpm", "68a081f69b478bc309a857f45957ab5c921da5d4ebd755520b983a5626230a3e"},
 }

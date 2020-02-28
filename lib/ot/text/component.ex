@@ -81,6 +81,7 @@ defmodule OT.Text.Component do
   """
   @spec length(t) :: non_neg_integer
   def length(comp) when is_integer(comp), do: comp
+  def length(%{d: del}) when is_integer(del), do: del
   def length(%{d: del}), do: JSString.length(del)
   def length(%{i: ins}), do: JSString.length(ins)
 
@@ -143,6 +144,9 @@ defmodule OT.Text.Component do
   def join(%{i: ins_a}, %{i: ins_b}),
     do: [%{i: ins_a <> ins_b}]
 
+  def join(%{d: del_a}, %{d: del_b}) when is_integer(del_a) and is_integer(del_b),
+    do: [%{d: del_a + del_b}]
+
   def join(%{d: del_a}, %{d: del_b}),
     do: [%{d: del_a <> del_b}]
 
@@ -163,6 +167,7 @@ defmodule OT.Text.Component do
   @spec no_op?(t) :: boolean
   def no_op?(0), do: true
   def no_op?(%{d: ""}), do: true
+  def no_op?(%{d: 0}), do: true
   def no_op?(%{i: ""}), do: true
   def no_op?(_), do: false
 
@@ -183,6 +188,10 @@ defmodule OT.Text.Component do
   @spec split(t, non_neg_integer) :: {t, t}
   def split(comp, index) when is_integer(comp) do
     {index, comp - index}
+  end
+
+  def split(%{d: del}, index) when is_integer(del) do
+    {%{d: index}, %{d: del - index}}
   end
 
   def split(%{d: del}, index) do

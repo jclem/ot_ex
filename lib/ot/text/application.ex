@@ -97,7 +97,7 @@ defmodule OT.Text.Application do
     end
   end
 
-  # Add support for d: "aaaa" usecases
+  # Add support for d: "aaaa" usecases, is deprecated in CSB now
   defp do_apply(text, [%{d: del} | op], result) do
     do_apply(text, [%{d: JSString.length(del)} | op], result)
   end

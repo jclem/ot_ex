@@ -9,14 +9,14 @@ defmodule OT.Text.TransformationTest do
 
   test "it converts existing inserts to b side retains at the end" do
     a = [
-      %{d: "USUoMAQ"},
-      %{d: "Y"},
+      %{d: 7},
+      %{d: 1},
       0,
-      %{d: ""},
+      %{d: 0},
       %{i: "pqjGPUs"},
       %{i: "TGt8P1Me07"},
-      %{d: ""},
-      %{d: "6"}
+      %{d: 0},
+      %{d: 1}
     ]
 
     b = [
@@ -32,7 +32,7 @@ defmodule OT.Text.TransformationTest do
       %{i: "U"}
     ]
 
-    expected_result = [41, %{d: "USUoMAQY"}, %{i: "pqjGPUsTGt8P1Me07"}, %{d: "6"}, 14]
+    expected_result = [41, %{d: 8}, %{i: "pqjGPUsTGt8P1Me07"}, %{d: 1}, 14]
 
     assert OT.Text.Transformation.transform(a, b, :right) == expected_result
   end
@@ -88,7 +88,7 @@ defmodule OT.Text.TransformationTest do
     # con_op: babcdef
     # result: babacdef
     new_op = [2, %{i: "a"}, 4]
-    conc_op = [%{d: "a"}, 5]
+    conc_op = [%{d: 1}, 5]
 
     res = Transformation.transform(new_op, conc_op, :left)
     assert res == [1, %{i: "a"}, 4]
