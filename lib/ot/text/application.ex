@@ -40,10 +40,12 @@ defmodule OT.Text.Application do
     target_length = count_length(op)
 
     with {:ok, result} <- do_apply(text, op) do
-      if JSString.length(result) == target_length do
+      result_length = JSString.length(result)
+
+      if result_length == target_length do
         {:ok, result}
       else
-        {:error, :length_mismatch}
+        {:error, {:length_mismatch, result_length, target_length}}
       end
     end
   end

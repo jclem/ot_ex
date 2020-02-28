@@ -30,7 +30,7 @@ defmodule OT.Text.ApplicationTest do
   end
 
   test "detects too short operations" do
-    assert {:error, :length_mismatch} == Application.apply("Foo Bar", [3, %{d: "aaa"}])
+    assert {:error, {:length_mismatch, 4, 3}} == Application.apply("Foo Bar", [3, %{d: "aaa"}])
   end
 
   test "detects correct operation length with multiple operations" do
