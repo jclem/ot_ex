@@ -44,6 +44,7 @@ defmodule OT.Mixfile do
       {:credo, "~> 0.8", only: [:dev, :test]},
       {:benchee, "~> 1.0", only: [:dev, :test]},
       {:jason, "~> 1.0", only: [:dev, :test]},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test]},
       {:iconv, "~> 1.0.10"}
     ]
   end
