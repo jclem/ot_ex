@@ -69,6 +69,25 @@ defmodule OT.Text.Application do
     count_length(op, result + ret)
   end
 
+  @spec count_base_length(Operation.t(), number) :: number
+  def count_base_length(op, result \\ 0)
+
+  def count_base_length([], result) do
+    result
+  end
+
+  def count_base_length([%{d: del} | op], result) do
+    count_base_length(op, result + JSString.length(del))
+  end
+
+  def count_base_length([%{i: _ins} | op], result) do
+    count_base_length(op, result)
+  end
+
+  def count_base_length([ret | op], result) do
+    count_base_length(op, result + ret)
+  end
+
   @doc """
   Same as `apply/2`, but raises if the application fails.
   """
