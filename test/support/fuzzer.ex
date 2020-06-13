@@ -16,6 +16,10 @@ defmodule OT.Fuzzer do
         op_b = unquote(mod).random_op(data_a)
         data_b = unquote(mod).apply!(data_a, op_b)
 
+        IO.inspect("___")
+        IO.inspect(op_a)
+        IO.inspect(op_b)
+
         # Compose the edits
         op_c = unquote(mod).compose(op_a, op_b)
         data_c = unquote(mod).apply!(initial_value, op_c)
@@ -71,16 +75,8 @@ defmodule OT.Fuzzer do
         op_a = unquote(mod).random_op(initial_value)
         op_b = unquote(mod).random_op(initial_value)
 
-        side = Enum.random([:left, :right])
-        other_side = if side == :left, do: :right, else: :left
-
         # Transform the edits
-        op_a_prime = unquote(mod).transform(op_a, op_b, side)
-        op_b_prime = unquote(mod).transform(op_b, op_a, other_side)
-
-        IO.inspect(initial_value)
-        IO.inspect(op_a)
-        IO.inspect(op_b_prime)
+        {op_a_prime, op_b_prime} = unquote(mod).transform(op_a, op_b)
 
         data_a =
           initial_value

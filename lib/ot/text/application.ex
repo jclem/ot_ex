@@ -7,7 +7,6 @@ defmodule OT.Text.Application do
 
   alias OT.Text, as: Text
   alias Text.Operation
-  alias Text.JSString
 
   @typedoc """
   The result of an `apply/2` function call, representing either success or error
@@ -15,7 +14,7 @@ defmodule OT.Text.Application do
   """
   @type apply_result ::
           {:ok, OT.Text.datum()}
-          | {:error, :delete_mismatch | :retain_too_long}
+          | {:error, binary}
 
   @doc """
   Apply an operation to a piece of text.
@@ -37,95 +36,6 @@ defmodule OT.Text.Application do
   """
   @spec apply(Text.datum(), Operation.t()) :: apply_result
   def apply(text, op) do
-    OT.RustTest.apply(text, op)
-  end
-
-  @spec count_length(Operation.t(), number) :: number
-  def count_length(op, result \\ 0)
-
-  def count_length([], result) do
-    result
-  end
-
-  def count_length([%{d: _del} | op], result) do
-    count_length(op, result)
-  end
-
-  def count_length([%{i: ins} | op], result) do
-    count_length(op, result + JSString.length(ins))
-  end
-
-  def count_length([ret | op], result) do
-    count_length(op, result + ret)
-  end
-
-  @spec count_base_length(Operation.t(), number) :: number
-  def count_base_length(op, result \\ 0)
-
-  def count_base_length([], result) do
-    result
-  end
-
-  def count_base_length([%{d: del} | op], result) do
-    count_base_length(op, result + JSString.length(del))
-  end
-
-  def count_base_length([%{i: _ins} | op], result) do
-    count_base_length(op, result)
-  end
-
-  def count_base_length([ret | op], result) do
-    count_base_length(op, result + ret)
-  end
-
-  @doc """
-  Same as `apply/2`, but raises if the application fails.
-  """
-  @spec apply!(Text.datum(), Operation.t()) :: Text.datum() | no_return
-  def apply!(text, op) do
-    with {:ok, result} <- __MODULE__.apply(text, op) do
-      result
-    else
-      {:error, error} -> raise to_string(error)
-    end
-  end
-
-  @spec do_apply(Text.datum(), Operation.t(), Text.datum()) :: apply_result
-  defp do_apply(text, op, result \\ "")
-
-  defp do_apply(text, [], result) do
-    {:ok, result <> text}
-  end
-
-  defp do_apply(text, [%{d: del} | op], result) when is_integer(del) do
-    if del <= JSString.length(text) do
-      {_deleted, text} = JSString.split_at(text, del)
-
-      text
-      |> do_apply(op, result)
-    else
-      {:error, :delete_mismatch}
-    end
-  end
-
-  # Add support for d: "aaaa" usecases, is deprecated in CSB now
-  defp do_apply(text, [%{d: del} | op], result) do
-    do_apply(text, [%{d: JSString.length(del)} | op], result)
-  end
-
-  defp do_apply(text, [%{i: ins} | op], result) do
-    text
-    |> do_apply(op, result <> ins)
-  end
-
-  defp do_apply(text, [ret | op], result) when is_integer(ret) do
-    if ret <= JSString.length(text) do
-      {retained, text} = JSString.split_at(text, ret)
-
-      text
-      |> do_apply(op, result <> retained)
-    else
-      {:error, :retain_too_long}
-    end
+    Elixir.Rust.OT.apply(text, op)
   end
 end

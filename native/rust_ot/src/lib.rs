@@ -58,8 +58,44 @@ fn transform<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
     }
 }
 
+fn compose<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
+    let operation_a_arg: Vec<Operation> = args[0].decode()?;
+    let operation_b_arg: Vec<Operation> = args[1].decode()?;
+
+    let operation_a: OperationSeq = OperationSeq::from_iter(operation_a_arg);
+    let operation_b: OperationSeq = OperationSeq::from_iter(operation_b_arg);
+
+    match operation_a.compose(&operation_b) {
+        Ok(composed_op) => Ok((atoms::ok(), composed_op).encode(env)),
+        Err(err) => Ok((atoms::error(), format!("{}", err)).encode(env)),
+    }
+}
+
+fn compose_many<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
+    let operation_a_arg: Vec<Operation> = args[0].decode()?;
+    let operation_b_arg: Vec<Vec<Operation>> = args[1].decode()?;
+
+    let mut final_result = OperationSeq::from_iter(operation_a_arg);
+
+    for op_arg in operation_b_arg {
+        let new_op = OperationSeq::from_iter(op_arg);
+
+        match final_result.compose(&new_op) {
+            Ok(result) => final_result = result,
+            Err(ot_error) => return Ok((atoms::error(), format!("{}", ot_error)).encode(env)),
+        }
+    }
+
+    return Ok((atoms::ok(), final_result).encode(env));
+}
+
 rustler_export_nifs!(
     "Elixir.Rust.OT",
-    [("apply", 2, apply), ("transform", 2, transform)],
+    [
+        ("apply", 2, apply),
+        ("transform", 2, transform),
+        ("compose", 2, compose),
+        ("compose_many", 2, compose_many),
+    ],
     None
 );

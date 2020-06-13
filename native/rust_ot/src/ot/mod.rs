@@ -149,7 +149,7 @@ impl fmt::Display for OTError {
       ),
       OTError::TargetBaseLengthMismatch(base, target) => write!(
         f,
-        "target and base length mismatch, base: {}, target: {}",
+        "Target and base length mismatch, base: {}, target: {}",
         base, target
       ),
       OTError::ComposeFirstOperationTooShort => write!(
@@ -197,8 +197,8 @@ impl OperationSeq {
   pub fn compose(&self, other: &Self) -> Result<Self, OTError> {
     if self.target_len != other.base_len {
       return Err(OTError::TargetBaseLengthMismatch(
-        self.target_len,
         other.base_len,
+        self.target_len,
       ));
     }
 
@@ -456,7 +456,7 @@ impl OperationSeq {
           a_prime.delete(min);
         }
         (Some(Operation::Retain(i)), Some(Operation::Delete(j))) => {
-          let mut min = 0;
+          let min;
           match i.cmp(&j) {
             Ordering::Less => {
               min = *i;
