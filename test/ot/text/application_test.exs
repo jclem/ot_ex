@@ -14,15 +14,21 @@ defmodule OT.Text.ApplicationTest do
   end
 
   test "handles out of bound deletes well" do
-    assert Application.apply("Foo", [0, %{d: "Foos"}]) == {:error, :delete_mismatch}
+    assert Application.apply("Foo", [0, %{d: "Foos"}]) ==
+             {:error,
+              "The operation's base length must be equal to the string's length. String length: 3, base length: 4"}
   end
 
   test "returns an error if a retain is too long" do
-    assert Application.apply("Foo", [4]) == {:error, :retain_too_long}
+    assert Application.apply("Foo", [4]) ==
+             {:error,
+              "The operation's base length must be equal to the string's length. String length: 3, base length: 4"}
   end
 
   test "gives retain too long errors with end retains" do
-    assert Application.apply("Foo", [3, %{i: " Bar"}, 3]) == {:error, :retain_too_long}
+    assert Application.apply("Foo", [3, %{i: " Bar"}, 3]) ==
+             {:error,
+              "The operation's base length must be equal to the string's length. String length: 3, base length: 6"}
   end
 
   test "can delete with number" do
@@ -30,7 +36,9 @@ defmodule OT.Text.ApplicationTest do
   end
 
   test "detects too short operations" do
-    assert {:error, {:length_mismatch, 4, 3}} == Application.apply("Foo Bar", [3, %{d: "aaa"}])
+    assert {:error,
+            "The operation's base length must be equal to the string's length. String length: 7, base length: 6"} ==
+             Application.apply("Foo Bar", [3, %{d: "aaa"}])
   end
 
   test "detects correct operation length with multiple operations" do
@@ -42,5 +50,19 @@ defmodule OT.Text.ApplicationTest do
     code = "aa"
 
     assert {:ok, "a"} == Application.apply(code, [1, %{d: "a"}])
+  end
+
+  test "can insert between emojis" do
+    code = "👨‍❤️‍💋‍👨👨‍❤️‍💋‍👨"
+
+    assert {:ok, "👨‍❤️‍💋‍👨👨‍❤️‍💋‍a👨"} == OT.Text.Application2.apply(code, [20, %{i: "a"}, 2])
+  end
+
+  test "handles errors" do
+    code = "aa"
+
+    assert {:error,
+            "The operation's base length must be equal to the string's length. String length: 2, base length: 3"} ==
+             OT.Text.Application2.apply(code, [3, "a"])
   end
 end

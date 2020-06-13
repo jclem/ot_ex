@@ -1,4 +1,4 @@
-defmodule OT.Text.Application do
+defmodule OT.Text.Application2 do
   @moduledoc """
   The application of a text operation to a piece of text.
 
@@ -28,7 +28,7 @@ defmodule OT.Text.Application do
       iex> OT.Text.Application.apply("Foo", [3, %{i: " Bar"}])
       {:ok, "Foo Bar"}
       iex> OT.Text.Application.apply("Foo", [%{d: "Foos"}])
-      {:error, "The operation's base length must be equal to the string's length. String length: 3, base length: 4"}
+      {:error, :delete_mismatch}
 
   ## Errors
   - `:delete_mismatch` A delete component did not match the text it would have

@@ -11,11 +11,8 @@ defmodule OT.Text.TransformationTest do
     a = [
       %{d: 7},
       %{d: 1},
-      0,
-      %{d: 0},
       %{i: "pqjGPUs"},
       %{i: "TGt8P1Me07"},
-      %{d: 0},
       %{d: 1}
     ]
 
@@ -24,15 +21,13 @@ defmodule OT.Text.TransformationTest do
       9,
       %{i: "Z4JMfYcG"},
       %{i: "Jip"},
-      0,
-      0,
       # These two need to be converted to retains
       %{i: "j0"},
       # These two need to be converted to retains
       %{i: "U"}
     ]
 
-    expected_result = [41, %{d: 8}, %{i: "pqjGPUsTGt8P1Me07"}, %{d: 1}, 14]
+    expected_result = [17, %{i: "8-g3Q1RbtAxXwAZrfAziIkJjd1PB-fcv8gd0hVy2xZ4JMfYcGJipj0U"}]
 
     assert OT.Text.Transformation.transform(a, b, :right) == expected_result
   end
@@ -60,13 +55,6 @@ defmodule OT.Text.TransformationTest do
     conc_op = [1, %{i: "ef"}, 1]
 
     assert [4, %{i: "vc"}] == Transformation.transform(new_op, conc_op, :left)
-  end
-
-  test "retain of transformed operation is transformed" do
-    new_op = [12, %{i: "a"}]
-    conc_op = [0, %{i: "b"}]
-
-    assert [13, %{i: "a"}] == Transformation.transform(new_op, conc_op, :left)
   end
 
   test "exhausted A with retain B" do

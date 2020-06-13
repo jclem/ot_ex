@@ -11,4 +11,6 @@
   "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "fdf843bca858203ae1de16da2ee206f53416bbda5dc8c9e78f43243de4bc3afe"},
   "mix_test_watch": {:hex, :mix_test_watch, "1.0.2", "34900184cbbbc6b6ed616ed3a8ea9b791f9fd2088419352a6d3200525637f785", [:mix], [{:file_system, "~> 0.2.1 or ~> 0.3", [hex: :file_system, repo: "hexpm", optional: false]}], "hexpm", "47ac558d8b06f684773972c6d04fcc15590abdb97aeb7666da19fcbfdc441a07"},
   "p1_utils": {:hex, :p1_utils, "1.0.13", "176577cafb54a8c2fdc0a7fc62b9a21ab0f66588f4062792cd9e65f3e500bfdb", [:rebar3], [], "hexpm", "68a081f69b478bc309a857f45957ab5c921da5d4ebd755520b983a5626230a3e"},
+  "rustler": {:git, "https://github.com/rusterlium/rustler.git", "e343b8cacdea36889015f43da629a2ea8e337718", [ref: "e343b8ca", sparse: "rustler_mix"]},
+  "toml": {:hex, :toml, "0.5.2", "e471388a8726d1ce51a6b32f864b8228a1eb8edc907a0edf2bb50eab9321b526", [:mix], [], "hexpm", "f1e3dabef71fb510d015fad18c0e05e7c57281001141504c6b69d94e99750a07"},
 }

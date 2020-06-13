@@ -78,6 +78,10 @@ defmodule OT.Fuzzer do
         op_a_prime = unquote(mod).transform(op_a, op_b, side)
         op_b_prime = unquote(mod).transform(op_b, op_a, other_side)
 
+        IO.inspect(initial_value)
+        IO.inspect(op_a)
+        IO.inspect(op_b_prime)
+
         data_a =
           initial_value
           |> unquote(mod).apply!(op_a)

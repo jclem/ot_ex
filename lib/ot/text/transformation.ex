@@ -23,11 +23,20 @@ defmodule OT.Text.Transformation do
   operation came later. This is important when deciding whether it is acceptable
   to break up insert components from one operation or the other.
   """
+  # @spec transform(Operation.t(), Operation.t(), OT.Type.side()) :: Operation.t()
+  # def transform(op_a, op_b, side) do
+  #   {op_a, op_b}
+  #   |> next
+  #   |> do_transform(side)
+  # end
   @spec transform(Operation.t(), Operation.t(), OT.Type.side()) :: Operation.t()
   def transform(op_a, op_b, side) do
-    {op_a, op_b}
-    |> next
-    |> do_transform(side)
+    {:ok, left, right} = Elixir.OT.RustTest.transform(op_a, op_b)
+
+    case side do
+      :left -> left
+      :right -> right
+    end
   end
 
   @spec do_transform(Scanner.output(), OT.Type.side(), Operation.t()) :: Operation.t()

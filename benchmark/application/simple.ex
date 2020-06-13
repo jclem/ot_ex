@@ -18,27 +18,21 @@ defmodule OTHelpers do
   end
 end
 
-code = File.read!(Path.join(__DIR__, "big_code.txt"))
-big_op = Jason.decode!(File.read!(Path.join(__DIR__, "big_operation.txt")))
+code = File.read!(Path.join(__DIR__, "../big_code.txt"))
+big_op = Jason.decode!(File.read!(Path.join(__DIR__, "../big_operation.txt")))
 big_ex_op = OTHelpers.js_to_ex_ot(big_op)
 
-code2 = File.read!(Path.join(__DIR__, "big_code2.txt"))
-big_op2 = Jason.decode!(File.read!(Path.join(__DIR__, "big_operation2.txt")))
+code2 = File.read!(Path.join(__DIR__, "../big_code2.txt"))
+big_op2 = Jason.decode!(File.read!(Path.join(__DIR__, "../big_operation2.txt")))
 big_ex_op2 = OTHelpers.js_to_ex_ot(big_op2)
 
 Benchee.run(
   %{
-    "apply" => fn ->
+    "elixir" => fn ->
       OT.Text.Application.apply!(code, [28965, %{i: "B"}, %{d: 11}, 30952])
     end,
-    "apply_del_string" => fn ->
-      OT.Text.Application.apply!(code, [28965, %{i: "B"}, %{d: "CodeSandbox"}, 30952])
-    end,
-    "big_op" => fn ->
-      OT.Text.Application.apply!(code, big_ex_op)
-    end,
-    "big_op2" => fn ->
-      OT.Text.Application.apply!(code2, big_ex_op2)
+    "rust" => fn ->
+      OT.Text.Application2.apply!(code, [28965, "B", -11, 30952])
     end
   },
   memory_time: 2

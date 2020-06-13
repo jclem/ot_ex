@@ -24,7 +24,9 @@ defmodule OT.Mixfile do
       name: "OT",
       homepage_url: @github_url,
       source_url: @github_url,
-      docs: docs()
+      docs: docs(),
+      compilers: [:rustler] ++ Mix.compilers(),
+      rustler_crates: [rust_ot: []]
     ]
   end
 
@@ -45,7 +47,8 @@ defmodule OT.Mixfile do
       {:benchee, "~> 1.0", only: [:dev, :test]},
       {:jason, "~> 1.0", only: [:dev, :test]},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test]},
-      {:iconv, "~> 1.0.10"}
+      {:iconv, "~> 1.0.10"},
+      {:rustler, github: "rusterlium/rustler", ref: "e343b8ca", sparse: "rustler_mix"}
     ]
   end
 
